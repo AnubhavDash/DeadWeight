@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  The consignment. An isometric crate, drawn flat so it can be sampled.
+
+  Two things about this file are deliberate. The gaps between the slats are
+  painted in the page's own background colour (#0d1113) rather than left
+  transparent, because the particle sampler in `ParticleObject` places a
+  particle wherever alpha is above 10 and colours it from the pixel: dark
+  particles read as gaps against the page and keep the crate's silhouette
+  whole. And there is no crimson anywhere, because in this app crimson means
+  a negative number and nothing else.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <g stroke="#0d1113" stroke-width="6" stroke-linecap="butt">
+    <!-- Lid, catching what light there is. -->
+    <polygon points="256,86 430,176 256,266 82,176" fill="#e8e4dc" stroke="none"/>
+    <!-- Left face, half-lit. -->
+    <polygon points="82,176 256,266 256,438 82,348" fill="#93aeb7" stroke="none"/>
+    <!-- Right face, in shade. -->
+    <polygon points="256,266 430,176 430,348 256,438" fill="#54737c" stroke="none"/>
+
+    <!-- Slats: three boards a side, the gaps painted as background. -->
+    <line x1="82" y1="233" x2="256" y2="323"/>
+    <line x1="82" y1="290" x2="256" y2="380"/>
+    <line x1="256" y1="323" x2="430" y2="233"/>
+    <line x1="256" y1="380" x2="430" y2="290"/>
+
+    <!-- The brace every crate has, and the corner it turns. -->
+    <line x1="82" y1="348" x2="256" y2="266" stroke-width="5"/>
+    <line x1="430" y1="176" x2="256" y2="438" stroke-width="5"/>
+    <line x1="256" y1="266" x2="256" y2="438" stroke-width="5"/>
+
+    <!-- Lid seam. -->
+    <line x1="82" y1="176" x2="256" y2="266" stroke-width="5"/>
+    <line x1="430" y1="176" x2="256" y2="266" stroke-width="5"/>
+  </g>
+
+  <!-- Stencil block, the one place the marking colour is allowed. -->
+  <polygon points="104,199 168,232 168,262 104,229" fill="#7fb8c4"/>
+  <polygon points="300,306 372,269 372,297 300,334" fill="#7fb8c4" opacity="0.55"/>
+</svg>

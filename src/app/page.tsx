@@ -5,6 +5,7 @@
  * copy cannot drift away from the table it describes.
  */
 
+import { CrateObject } from "@/components/crate-object";
 import { ManifestBuilder } from "@/components/manifest-builder";
 import { SiteFooter } from "@/components/site-footer";
 import { citation, citationLabel, type CitationId } from "@/data/citations";
@@ -45,31 +46,44 @@ export default function Home() {
     <>
       <main className="flex-1 pt-14 sm:pt-20">
         <header className={SECTION}>
-          <p className={EYEBROW}>
-            {CRISIS.name} · {CRISIS.locus}
-          </p>
-          <h1 className="mt-5 max-w-4xl text-4xl leading-[1.05] sm:text-6xl lg:text-7xl">
-            Price your generosity
-            <br />
-            before you ship it.
-          </h1>
-          <div className="mt-7 max-w-2xl space-y-4 text-base leading-relaxed text-paper/85">
-            <p>
-              This is a tool for protecting generosity from being wasted. The impulse to put
-              something in a box and send it is the right impulse. What is in the box is the part
-              nobody prices — so this page prices it, in USD, against the response that is actually
-              running in Nepal right now.
-            </p>
-            <p className="text-meltwater">
-              A donated coat has to be flown, cleared, sorted, warehoused and — often enough —
-              burned. Every one of those steps has a published rate. Put a consignment on the
-              manifest below and the ledger works it the way a logistics officer would: at the
-              kindest end of every sourced range, so a bad verdict is one you cannot argue with.
-              Then it tells you what the same money delivers as cash.
-            </p>
-            <p className="border-l-2 border-sonar/50 pl-4 text-paper">
-              Nothing here says don&rsquo;t give. It says give the thing that arrives.
-            </p>
+          <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,21rem)] lg:gap-12">
+            <div>
+              <p className={EYEBROW}>
+                {CRISIS.name} · {CRISIS.locus}
+              </p>
+              <h1 className="mt-5 max-w-4xl text-4xl leading-[1.05] sm:text-6xl lg:text-7xl">
+                Price your generosity
+                <br />
+                before you ship it.
+              </h1>
+              <div className="mt-7 max-w-2xl space-y-4 text-base leading-relaxed text-paper/85">
+                <p>
+                  This is a tool for protecting generosity from being wasted. The impulse to put
+                  something in a box and send it is the right impulse. What is in the box is the part
+                  nobody prices — so this page prices it, in USD, against the response that is
+                  actually running in Nepal right now.
+                </p>
+                <p className="text-meltwater">
+                  A donated coat has to be flown, cleared, sorted, warehoused and — often enough —
+                  burned. Every one of those steps has a published rate. Put a consignment on the
+                  manifest below and the ledger works it the way a logistics officer would: at the
+                  kindest end of every sourced range, so a bad verdict is one you cannot argue with.
+                  Then it tells you what the same money delivers as cash.
+                </p>
+                <p className="border-l-2 border-sonar/50 pl-4 text-paper">
+                  Nothing here says don&rsquo;t give. It says give the thing that arrives.
+                </p>
+              </div>
+            </div>
+
+            {/* Second on a phone, deliberately: the headline is what has to be
+                above the fold, not the decoration. */}
+            <div>
+              <CrateObject className="h-56 w-full sm:h-72 lg:h-80" />
+              <p className="mt-2 text-center text-[10px] uppercase tracking-[0.16em] text-meltwater">
+                the box, before anyone weighs it
+              </p>
+            </div>
           </div>
         </header>
 
