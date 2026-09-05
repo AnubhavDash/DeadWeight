@@ -164,7 +164,7 @@ point is that this isn't negotiable.
 And a refused draft isn't a broken feature. The deterministic letter is written
 in the *same fifteen tokens* and finished by the *same substitution function*, so
 when the model is unavailable, or slow, or numeric, what you read is the engine's
-own prose and the byline changes from `gemini-3.8-flash` to `engine`. The feature
+own prose and the byline changes from a model id to `engine`. The feature
 degrades to the truth instead of to an error toast.
 
 ## Google AI — the letter from the warehouse
@@ -174,11 +174,22 @@ of the person who unpacked your consignment, writing back to tell you what
 happened to it. That's a thing a language model is genuinely good at and an
 engine is not: tone, restraint, the decision not to gloat.
 
-The route handler walks a chain — `gemini-3.8-flash`, then `gemini-3.5-flash`,
-then `gemini-2.5-flash`, overridable with `GEMINI_MODELS` so a retired model id
-is a config change rather than a deploy. Twelve seconds per model, and it moves
-down the chain on a timeout, an error, a blocked brief, *or a draft that failed
-the clamp*. A model that keeps inventing numbers simply loses its turn.
+The route handler walks a chain — `gemini-3.8-flash`, then `gemini-3.7-flash`,
+then `gemini-3.5-flash`, overridable with `GEMINI_MODELS` so a retired model id is
+a config change rather than a deploy. Sixteen seconds per model, and it moves down
+the chain on a timeout, an error, a blocked brief, *or a draft that failed the
+clamp*. A model that keeps inventing numbers simply loses its turn.
+
+That chain isn't defensive theatre — it earned its keep the first time I pointed a
+real key at it. `gemini-2.5-flash` sat at the tail until it started answering
+**404, "no longer available to new users"** while still being listed by
+`GET /v1beta/models`: being listed is not being callable. And `gemini-3.8-flash`,
+the newest and the one at the head, answers **503, "experiencing high demand"** on
+most attempts right now. So on a live run the letter you read is written by the
+middle of the chain, the log records both misses by name, and the reader is never
+shown a spinner that ends in nothing. Every figure in the model's letter came back
+byte-identical to the engine's — same dollars, same percentage, same kilograms —
+because the model never had any of them to get wrong.
 
 The prohibited-items paragraph gets handled separately, because it isn't an
 arithmetic problem. Donated infant formula and part-used medicine out of a home
@@ -323,7 +334,7 @@ non-optional peer, npm dutifully installs it, and nothing in a web app ever
 resolves the `index.native.js` that needs it. Hence `legacy-peer-deps=true`, with
 the reasoning written out in `.npmrc`.)
 
-Two stay, and the README says why in full. `stream-json` 1.9.1 under `jayson` is a
+Two stay, and here is why. `stream-json` 1.9.1 under `jayson` is a
 moderate O(depth²) parser DoS. It can't be bumped — the patched line is pure ESM
 whose `exports` map doesn't answer `jayson`'s
 `require('stream-json/streamers/StreamValues')` — and it can't be reached, because
