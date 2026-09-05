@@ -56,10 +56,10 @@ export function InsteadPanel({
   return (
     <section aria-label="What the same money sends instead" className="hairline mt-8 pt-6">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
-        <p className="display text-[11px] uppercase tracking-[0.2em] text-meltwater">
+        <p className="display text-xs uppercase tracking-[0.2em] text-meltwater">
           The same money, sent differently
         </p>
-        <span className="border border-sonar/40 px-1.5 py-px text-[10px] uppercase tracking-[0.16em] text-sonar">
+        <span className="border border-sonar/40 px-1.5 py-px text-2xs uppercase tracking-[0.16em] text-sonar">
           priced, not recommended
         </span>
       </div>
@@ -92,7 +92,7 @@ export function InsteadPanel({
                   </p>
                   <p
                     className={cn(
-                      "display shrink-0 text-[11px] uppercase tracking-[0.16em]",
+                      "display shrink-0 text-xs uppercase tracking-[0.16em]",
                       VERDICT_TONE[option.result.verdict],
                     )}
                   >
@@ -100,7 +100,7 @@ export function InsteadPanel({
                   </p>
                 </div>
 
-                <p className="ledger mt-1.5 text-[11px] leading-relaxed text-meltwater">
+                <p className="ledger mt-1.5 text-xs leading-relaxed text-meltwater">
                   {formatUsd(option.result.declared)} declared ·{" "}
                   <span className="text-paper/85">{formatUsd(option.result.net)}</span> delivered ·{" "}
                   {formatPercent(option.result.efficiency)} of it
@@ -113,7 +113,7 @@ export function InsteadPanel({
                 <button
                   type="button"
                   onClick={() => onAdopt(option.item.id, option.quantity)}
-                  className="mt-3 border border-rule px-3 py-1.5 text-[10px] uppercase tracking-[0.16em] text-meltwater transition-colors hover:border-sonar hover:text-sonar"
+                  className="mt-3 border border-rule px-3 py-1.5 text-2xs uppercase tracking-[0.16em] text-meltwater transition-colors hover:border-sonar hover:text-sonar"
                 >
                   put this on the manifest
                 </button>
@@ -121,7 +121,7 @@ export function InsteadPanel({
             ))}
           </ul>
 
-          <p className="mt-3 text-[11px] leading-relaxed text-meltwater">
+          <p className="mt-3 text-xs leading-relaxed text-meltwater">
             Cash is first on the appeal&rsquo;s own priority list, and none of these beat it — the
             links at the foot of this page are where it goes. What is above is the best of the things
             that come in a box.

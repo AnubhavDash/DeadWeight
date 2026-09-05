@@ -122,7 +122,7 @@ function EntryCard({ entry }: { entry: Entry }) {
         <p className="ledger text-sm text-paper">entry #{entry.index}</p>
         <span
           className={cn(
-            "border px-1.5 py-px text-[10px] uppercase tracking-[0.16em]",
+            "border px-1.5 py-px text-2xs uppercase tracking-[0.16em]",
             VERDICT_TONE[entry.verdict],
           )}
         >
@@ -130,7 +130,7 @@ function EntryCard({ entry }: { entry: Entry }) {
         </span>
       </div>
 
-      <dl className="ledger mt-3 grid gap-x-6 gap-y-1.5 text-[11px] sm:grid-cols-2">
+      <dl className="ledger mt-3 grid gap-x-6 gap-y-1.5 text-xs sm:grid-cols-2">
         <Field label="declared" value={formatUsd(entry.declared)} />
         <Field
           label="delivered, net"
@@ -144,11 +144,11 @@ function EntryCard({ entry }: { entry: Entry }) {
       </dl>
 
       <details className="group mt-3">
-        <summary className="w-fit cursor-pointer list-none text-[10px] uppercase tracking-[0.16em] text-meltwater hover:text-sonar">
+        <summary className="w-fit cursor-pointer list-none text-2xs uppercase tracking-[0.16em] text-meltwater hover:text-sonar">
           <span className="group-open:hidden">what was on it</span>
           <span className="hidden group-open:inline">hide</span>
         </summary>
-        <ul className="ledger mt-2 space-y-0.5 border-l border-rule pl-3 text-[11px] text-paper/80">
+        <ul className="ledger mt-2 space-y-0.5 border-l border-rule pl-3 text-xs text-paper/80">
           {entry.lines.map((line, index) => (
             <li key={`${index}-${line.itemId}`}>
               {CATALOG_BY_ID[line.itemId]?.label ?? line.itemId}
@@ -156,12 +156,12 @@ function EntryCard({ entry }: { entry: Entry }) {
             </li>
           ))}
         </ul>
-        <p className="ledger mt-2 break-all border-l border-rule pl-3 text-[10px] text-meltwater">
+        <p className="ledger mt-2 break-all border-l border-rule pl-3 text-2xs text-meltwater">
           sha-256 {entry.hash}
         </p>
       </details>
 
-      <p className="ledger mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[10px]">
+      <p className="ledger mt-3 flex flex-wrap gap-x-4 gap-y-1 text-2xs">
         <a href={explorerUrl(`address/${entry.address}`)} target="_blank" rel="noreferrer noopener" className={LINK}>
           account {short(entry.address)}
         </a>
@@ -235,7 +235,7 @@ export function PublicLedger() {
   return (
     <div>
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
-        <p className="ledger text-[11px] text-meltwater">
+        <p className="ledger text-xs text-meltwater">
           program{" "}
           <a
             href={explorerUrl(`address/${PROGRAM_ID.toBase58()}`)}
@@ -264,7 +264,7 @@ export function PublicLedger() {
           }}
           disabled={loading}
           // Padded to a thumb-sized target; the 10px small caps render 15px tall.
-          className="-my-1.5 py-1.5 text-[10px] uppercase tracking-[0.16em] text-meltwater transition-colors hover:text-sonar disabled:opacity-40"
+          className="-my-1.5 py-1.5 text-2xs uppercase tracking-[0.16em] text-meltwater transition-colors hover:text-sonar disabled:opacity-40"
         >
           {loading ? "reading devnet…" : "refresh"}
         </button>
@@ -306,7 +306,7 @@ function Entries({ totals, entries }: { totals: Totals; entries: readonly Entry[
 
   return (
     <>
-      <dl className="ledger mt-4 grid gap-x-6 gap-y-1.5 border border-rule px-3 py-3 text-[11px] sm:grid-cols-3">
+      <dl className="ledger mt-4 grid gap-x-6 gap-y-1.5 border border-rule px-3 py-3 text-xs sm:grid-cols-3">
         <Field label="entries" value={String(totals.count)} />
         <Field label="declared" value={formatUsd(totals.declared)} />
         <Field
@@ -317,14 +317,14 @@ function Entries({ totals, entries }: { totals: Totals; entries: readonly Entry[
       </dl>
 
       {totals.declared > 0 ? (
-        <p className="mt-2 text-[11px] leading-relaxed text-meltwater">
+        <p className="mt-2 text-xs leading-relaxed text-meltwater">
           {formatUsd(totals.declared)} declared across everything the notary holds,{" "}
           {formatUsd(totals.net)} of it delivered — {formatPercent(totals.net / totals.declared)} of
           what was given. The program keeps those two totals itself; this page only divides them.
         </p>
       ) : null}
 
-      <p className="mt-4 text-[11px] leading-relaxed text-meltwater">
+      <p className="mt-4 text-xs leading-relaxed text-meltwater">
         Each account stores at most {MAX_CHAIN_LINES} lines, the largest by declared value, while
         every figure beside them was computed over the whole manifest and the hash covers all of it.
         A long consignment shows a sample of its contents; none of its arithmetic is missing.
@@ -337,7 +337,7 @@ function Entries({ totals, entries }: { totals: Totals; entries: readonly Entry[
       </ul>
 
       {entries.length !== totals.count ? (
-        <p className="mt-3 text-[11px] leading-relaxed text-meltwater">
+        <p className="mt-3 text-xs leading-relaxed text-meltwater">
           The registry counts {totals.count} entries and this endpoint returned {entries.length}.
           Asking a public RPC for every account of a program is the first thing it throttles — the
           missing entries are still on the chain.

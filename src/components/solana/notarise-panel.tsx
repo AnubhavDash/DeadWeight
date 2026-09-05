@@ -59,10 +59,10 @@ interface Outcome {
   readonly error?: string;
 }
 
-const HEADING = "display text-[11px] uppercase tracking-[0.2em] text-meltwater";
+const HEADING = "display text-xs uppercase tracking-[0.2em] text-meltwater";
 
 const BUTTON =
-  "w-full border px-4 py-3 text-[11px] uppercase tracking-[0.18em] transition-colors disabled:cursor-not-allowed disabled:opacity-40";
+  "w-full border px-4 py-3 text-xs uppercase tracking-[0.18em] transition-colors disabled:cursor-not-allowed disabled:opacity-40";
 
 /** `DeadwBH8…yxZ5F`, for an address that has to be readable at 382px. */
 function short(address: string): string {
@@ -189,7 +189,7 @@ export function NotarisePanel({
     <section aria-label="Notarise this verdict on devnet" className="hairline mt-8 pt-6">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
         <p className={HEADING}>Notarise the verdict</p>
-        <span className="border border-crimson/40 px-1.5 py-px text-[10px] uppercase tracking-[0.16em] text-crimson">
+        <span className="border border-crimson/40 px-1.5 py-px text-2xs uppercase tracking-[0.16em] text-crimson">
           devnet demonstration
         </span>
       </div>
@@ -204,7 +204,7 @@ export function NotarisePanel({
         disagrees.
       </p>
 
-      <dl className="ledger mt-4 space-y-1.5 border border-rule px-3 py-3 text-[11px]">
+      <dl className="ledger mt-4 space-y-1.5 border border-rule px-3 py-3 text-xs">
         <Field label="declared" value={formatUsd(result.declared)} />
         <Field
           label="delivered, net"
@@ -224,7 +224,7 @@ export function NotarisePanel({
       </dl>
 
       {truncated ? (
-        <p className="mt-2 text-[11px] leading-relaxed text-meltwater">
+        <p className="mt-2 text-xs leading-relaxed text-meltwater">
           The account holds {MAX_CHAIN_LINES} lines, so it stores the {MAX_CHAIN_LINES} largest by
           declared value. Every figure above is computed over all {lineCount}, and the hash covers
           all {lineCount} — the stored list is a sample, the arithmetic is not.
@@ -259,13 +259,13 @@ export function NotarisePanel({
         )}
 
         {empty ? (
-          <p className="text-[11px] leading-relaxed text-meltwater">
+          <p className="text-xs leading-relaxed text-meltwater">
             Put something on the manifest first. The program refuses an empty one.
           </p>
         ) : null}
 
         {connected && publicKey ? (
-          <p className="ledger flex flex-wrap items-baseline justify-between gap-x-3 text-[10px] text-meltwater">
+          <p className="ledger flex flex-wrap items-baseline justify-between gap-x-3 text-2xs text-meltwater">
             <span>{short(publicKey.toBase58())} · devnet</span>
             <button type="button" onClick={() => void disconnect()} className="hover:text-crimson">
               disconnect
@@ -282,10 +282,10 @@ export function NotarisePanel({
 
       {shown?.receipt ? (
         <div className="mt-3 border border-sonar/40 bg-sonar/5 px-3 py-3">
-          <p className="display text-[10px] uppercase tracking-[0.18em] text-sonar">
+          <p className="display text-2xs uppercase tracking-[0.18em] text-sonar">
             entry #{shown.receipt.index} on the devnet ledger
           </p>
-          <p className="ledger mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px]">
+          <p className="ledger mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs">
             <a
               href={explorerUrl(`tx/${shown.receipt.signature}`)}
               target="_blank"
@@ -303,7 +303,7 @@ export function NotarisePanel({
               account {short(shown.receipt.pledge)}
             </a>
           </p>
-          <p className="mt-2 text-[11px] leading-relaxed text-meltwater">
+          <p className="mt-2 text-xs leading-relaxed text-meltwater">
             It is on the public ledger now, alongside everyone else&rsquo;s —{" "}
             <Link
               href="/notary"

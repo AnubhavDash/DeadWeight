@@ -51,10 +51,10 @@ const REFUSAL: Record<Refusal, string> = {
     "No model answered — this build may be running without a key. What follows is the letter this build writes itself, in the same words the model is asked to write.",
 };
 
-const HEADING = "display text-[11px] uppercase tracking-[0.2em] text-meltwater";
+const HEADING = "display text-xs uppercase tracking-[0.2em] text-meltwater";
 
 const BUTTON =
-  "w-full border px-4 py-3 text-[11px] uppercase tracking-[0.18em] transition-colors disabled:cursor-not-allowed disabled:opacity-40";
+  "w-full border px-4 py-3 text-xs uppercase tracking-[0.18em] transition-colors disabled:cursor-not-allowed disabled:opacity-40";
 
 /**
  * A letter belongs to the manifest that produced it. Both are tagged with this,
@@ -249,7 +249,7 @@ export function LetterPanel({
     <section aria-label="The reply from the warehouse" className="hairline mt-8 pt-6">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
         <p className={HEADING}>The reply from the warehouse</p>
-        <span className="border border-sonar/40 px-1.5 py-px text-[10px] uppercase tracking-[0.16em] text-sonar">
+        <span className="border border-sonar/40 px-1.5 py-px text-2xs uppercase tracking-[0.16em] text-sonar">
           prose by a model, figures by the engine
         </span>
       </div>
@@ -277,7 +277,7 @@ export function LetterPanel({
       </button>
 
       {empty ? (
-        <p className="mt-2 text-[11px] leading-relaxed text-meltwater">
+        <p className="mt-2 text-xs leading-relaxed text-meltwater">
           Put something on the manifest first. There is nothing to write about yet.
         </p>
       ) : null}
@@ -291,7 +291,7 @@ export function LetterPanel({
 
         {shown?.reply ? (
           <article className="mt-3 border border-rule bg-rule/10 px-4 py-4">
-            <p className="whitespace-pre-line text-[13px] leading-[1.75] text-paper/90">
+            <p className="whitespace-pre-line text-base leading-[1.75] text-paper/90">
               {shown.reply.letter}
             </p>
 
@@ -300,7 +300,7 @@ export function LetterPanel({
                 type="button"
                 onClick={() => void listen()}
                 aria-label={playback === "playing" ? "Stop reading the letter" : "Read the letter aloud"}
-                className="border border-rule px-3 py-1.5 text-[10px] uppercase tracking-[0.16em] text-meltwater transition-colors hover:border-sonar hover:text-sonar"
+                className="border border-rule px-3 py-1.5 text-2xs uppercase tracking-[0.16em] text-meltwater transition-colors hover:border-sonar hover:text-sonar"
               >
                 {playback === "fetching"
                   ? "finding a voice…"
@@ -309,17 +309,17 @@ export function LetterPanel({
                     : "read it aloud"}
               </button>
               {playback === "playing" && voice !== null ? (
-                <span className="text-[10px] uppercase tracking-[0.16em] text-meltwater">
+                <span className="text-2xs uppercase tracking-[0.16em] text-meltwater">
                   {voice === "elevenlabs" ? "read by elevenlabs" : "read by your browser"}
                 </span>
               ) : null}
             </div>
 
             {voiceError !== null ? (
-              <p className="mt-2 text-[11px] leading-relaxed text-crimson">{voiceError}</p>
+              <p className="mt-2 text-xs leading-relaxed text-crimson">{voiceError}</p>
             ) : null}
 
-            <p className="mt-3 text-[11px] leading-relaxed text-meltwater">
+            <p className="mt-3 text-xs leading-relaxed text-meltwater">
               {shown.reply.refused ? (
                 REFUSAL[shown.reply.refused]
               ) : (

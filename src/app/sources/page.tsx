@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 };
 
 const SECTION = "mx-auto w-full max-w-5xl px-5 sm:px-8";
-const EYEBROW = "display text-[11px] uppercase tracking-[0.2em] text-meltwater";
+const EYEBROW = "display text-xs uppercase tracking-[0.2em] text-meltwater";
 const CELL_NAMES = Object.keys(RATE_CELLS) as RateCellName[];
 const CITATION_IDS = Object.keys(CITATIONS) as CitationId[];
 
@@ -48,16 +48,16 @@ function RateRow({ name }: { name: RateCellName }) {
           {range(cell)} <span className="text-meltwater">{cell.unit}</span>
         </p>
       </div>
-      <p className="ledger mt-1 text-[11px] text-meltwater">
+      <p className="ledger mt-1 text-xs text-meltwater">
         as of {cell.asOf} · {cell.confidence} confidence
         {cell.assumption ? (
-          <span className="ml-2 border border-crimson/40 px-1 py-px text-[10px] uppercase tracking-[0.16em] text-crimson">
+          <span className="ml-2 border border-crimson/40 px-1 py-px text-2xs uppercase tracking-[0.16em] text-crimson">
             assumption
           </span>
         ) : null}
       </p>
       {cell.derivation ? (
-        <p className="ledger mt-2 text-[11px] leading-relaxed text-paper/70">{cell.derivation}</p>
+        <p className="ledger mt-2 text-xs leading-relaxed text-paper/70">{cell.derivation}</p>
       ) : null}
       {cell.note ? (
         <p className="mt-2 max-w-3xl text-xs leading-relaxed text-meltwater">{cell.note}</p>
@@ -177,7 +177,7 @@ export default function SourcesPage() {
                 >
                   {citation(id).title}
                 </a>
-                <p className="ledger text-[11px] text-meltwater">
+                <p className="ledger text-xs text-meltwater">
                   {citation(id).publisher}, {citation(id).published} · {id}
                 </p>
               </li>
@@ -201,12 +201,12 @@ export default function SourcesPage() {
                   <p className="text-sm text-paper/90">
                     {item.label}
                     {item.prohibited ? (
-                      <span className="ml-2 text-[10px] uppercase tracking-[0.16em] text-crimson">
+                      <span className="ml-2 text-2xs uppercase tracking-[0.16em] text-crimson">
                         do not send
                       </span>
                     ) : null}
                   </p>
-                  <p className="ledger text-[11px] text-meltwater">
+                  <p className="ledger text-xs text-meltwater">
                     {item.id} · {item.itemClass}
                   </p>
                 </div>
@@ -236,7 +236,7 @@ export default function SourcesPage() {
                   >
                     {source.title}
                   </a>
-                  <p className="ledger text-[11px] text-meltwater">
+                  <p className="ledger text-xs text-meltwater">
                     {source.publisher}, {source.published} ·{" "}
                     <span className={source.retrieval === "snippet" ? "text-crimson/90" : undefined}>
                       {RETRIEVAL_NOTE[source.retrieval]}

@@ -29,9 +29,9 @@ function Source({ id }: { id: CitationId }) {
 function Fact({ label, fact }: { label: string; fact: CrisisFact }) {
   return (
     <div className="border-l border-rule pl-3">
-      <p className="text-[10px] uppercase tracking-[0.16em] text-meltwater">{label}</p>
+      <p className="text-2xs uppercase tracking-[0.16em] text-meltwater">{label}</p>
       <p className="mt-1 text-sm text-paper/90">{fact.value}</p>
-      <p className="ledger mt-1 text-[10px] text-meltwater">
+      <p className="ledger mt-1 text-2xs text-meltwater">
         as of {fact.asOf} · <Source id={fact.source} />
       </p>
     </div>
@@ -39,7 +39,7 @@ function Fact({ label, fact }: { label: string; fact: CrisisFact }) {
 }
 
 const SECTION = "mx-auto w-full max-w-6xl px-5 sm:px-8";
-const EYEBROW = "display text-[11px] uppercase tracking-[0.2em] text-meltwater";
+const EYEBROW = "display text-xs uppercase tracking-[0.2em] text-meltwater";
 
 export default function Home() {
   return (
@@ -80,7 +80,7 @@ export default function Home() {
                 above the fold, not the decoration. */}
             <div>
               <CrateObject className="h-56 w-full sm:h-72 lg:h-80" />
-              <p className="mt-2 text-center text-[10px] uppercase tracking-[0.16em] text-meltwater">
+              <p className="mt-2 text-center text-2xs uppercase tracking-[0.16em] text-meltwater">
                 the box, before anyone weighs it
               </p>
             </div>
@@ -100,7 +100,7 @@ export default function Home() {
 
           <div className="mt-10 grid gap-8 border border-rule p-5 sm:p-6 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)]">
             <div>
-              <p className="text-[10px] uppercase tracking-[0.16em] text-meltwater">
+              <p className="text-2xs uppercase tracking-[0.16em] text-meltwater">
                 The flash appeal
               </p>
               <p className="ledger mt-2 text-3xl text-paper">
@@ -117,13 +117,13 @@ export default function Home() {
               </p>
             </div>
             <div>
-              <p className="text-[10px] uppercase tracking-[0.16em] text-meltwater">
+              <p className="text-2xs uppercase tracking-[0.16em] text-meltwater">
                 What the appeal asked for, in the order it asked
               </p>
               <ol className="mt-3 grid gap-y-1.5 sm:grid-cols-2">
                 {CRISIS.appeal.priorities.map((priority, index) => (
                   <li key={priority} className="flex gap-2.5 text-sm">
-                    <span className="ledger text-[11px] text-meltwater">
+                    <span className="ledger text-xs text-meltwater">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     <span className={index === 0 ? "text-sonar" : "text-paper/85"}>{priority}</span>

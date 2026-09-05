@@ -20,7 +20,7 @@ function CellNote({ cell, assumption }: { cell?: Cell; assumption?: boolean }) {
 
   return (
     <details className="group mt-1.5">
-      <summary className="flex cursor-pointer list-none items-center gap-2 text-[10px] uppercase tracking-[0.16em] text-meltwater transition-colors hover:text-sonar">
+      <summary className="flex cursor-pointer list-none items-center gap-2 text-2xs uppercase tracking-[0.16em] text-meltwater transition-colors hover:text-sonar">
         <span className="group-open:hidden">source</span>
         <span className="hidden group-open:inline">hide</span>
         {flagged ? (
@@ -39,11 +39,11 @@ function CellNote({ cell, assumption }: { cell?: Cell; assumption?: boolean }) {
           </a>{" "}
           — {source.publisher}, {source.published}
         </p>
-        <p className="ledger text-[11px]">
+        <p className="ledger text-xs">
           {cell.low === cell.high ? cell.low : `${cell.low}–${cell.high}`} {cell.unit} · as of{" "}
           {cell.asOf} · {cell.confidence} confidence
         </p>
-        {cell.derivation ? <p className="ledger text-[11px]">{cell.derivation}</p> : null}
+        {cell.derivation ? <p className="ledger text-xs">{cell.derivation}</p> : null}
         {source.quote ? <p className="text-paper/70">“{source.quote}”</p> : null}
         {cell.note ? <p>{cell.note}</p> : null}
         {source.retrieval === "snippet" ? (
@@ -83,7 +83,7 @@ function Row({ line }: { line: LedgerLine }) {
         </span>
       </div>
       {line.detail ? (
-        <p className="ledger mt-1 text-[11px] leading-relaxed text-meltwater">{line.detail}</p>
+        <p className="ledger mt-1 text-xs leading-relaxed text-meltwater">{line.detail}</p>
       ) : null}
       <CellNote cell={line.cell} assumption={line.assumption} />
     </li>
@@ -149,7 +149,7 @@ export function LedgerTable({ result }: { result: PricedManifest }) {
             <span className="display text-2xl uppercase tracking-[0.1em]">
               {VERDICT_LABEL[result.verdict]}
             </span>
-            <span className="ledger text-[11px] text-meltwater">
+            <span className="ledger text-xs text-meltwater">
               {formatPercent(result.efficiency)} of declared value delivered
             </span>
           </div>
@@ -189,7 +189,7 @@ export function LedgerTable({ result }: { result: PricedManifest }) {
           </div>
 
           {result.usesAssumptions ? (
-            <p className="text-[11px] leading-relaxed text-meltwater">
+            <p className="text-xs leading-relaxed text-meltwater">
               Lines tagged <span className="text-crimson">assumption</span> are reasoned from
               guidance rather than quoted from a source. They are marked everywhere they appear, and
               the sources page lists every one of them.

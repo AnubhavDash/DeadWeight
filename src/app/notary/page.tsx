@@ -30,10 +30,10 @@ export default function NotaryPage() {
       <main className="flex-1 pt-14 sm:pt-20">
         <header className={SECTION}>
           <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
-            <p className="display text-[11px] uppercase tracking-[0.2em] text-meltwater">
+            <p className="display text-xs uppercase tracking-[0.2em] text-meltwater">
               Deadweight · the notary
             </p>
-            <span className="border border-crimson/40 px-1.5 py-px text-[10px] uppercase tracking-[0.16em] text-crimson">
+            <span className="border border-crimson/40 px-1.5 py-px text-2xs uppercase tracking-[0.16em] text-crimson">
               devnet demonstration
             </span>
           </div>

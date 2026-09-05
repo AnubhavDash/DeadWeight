@@ -10,7 +10,7 @@
 import Link from "next/link";
 
 const LINK =
-  "-my-1.5 py-1.5 text-[11px] uppercase tracking-[0.16em] text-meltwater transition-colors hover:text-sonar";
+  "-my-1.5 py-1.5 text-xs uppercase tracking-[0.16em] text-meltwater transition-colors hover:text-sonar";
 
 export function SiteHeader() {
   return (

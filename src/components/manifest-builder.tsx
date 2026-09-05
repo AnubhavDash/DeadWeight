@@ -108,7 +108,7 @@ function ItemRow({
           <label htmlFor={`qty-${item.id}`} className={cn("block text-sm", active ? "text-paper" : "text-paper/80")}>
             {item.label}
           </label>
-          <p className="ledger mt-0.5 text-[11px] text-meltwater">
+          <p className="ledger mt-0.5 text-xs text-meltwater">
             {item.unitWeightKg} kg · ${item.declaredUsd.toFixed(2)} per {item.unit}
             {item.onAppeal ? <span className="ml-2 text-sonar">on the appeal</span> : null}
             {item.prohibited ? <span className="ml-2 text-crimson">prohibited</span> : null}
@@ -149,7 +149,7 @@ function ItemRow({
 
       {item.note ? (
         <details className="group mt-2">
-          <summary className="w-fit cursor-pointer list-none text-[10px] uppercase tracking-[0.16em] text-meltwater hover:text-sonar">
+          <summary className="w-fit cursor-pointer list-none text-2xs uppercase tracking-[0.16em] text-meltwater hover:text-sonar">
             <span className="group-open:hidden">why this matters</span>
             <span className="hidden group-open:inline">hide</span>
           </summary>
@@ -162,7 +162,7 @@ function ItemRow({
   );
 }
 
-const LEGEND = "display mb-3 text-[11px] uppercase tracking-[0.2em] text-meltwater";
+const LEGEND = "display mb-3 text-xs uppercase tracking-[0.2em] text-meltwater";
 
 export function ManifestBuilder() {
   const [quantities, setQuantities] = useState<Quantities>(PRESETS[0].lines);
@@ -234,7 +234,7 @@ export function ManifestBuilder() {
           <div className="border border-rule">
             {GROUPS.map((group) => (
               <div key={group.itemClass}>
-                <p className="border-b border-rule bg-rule/40 px-3 py-1.5 text-[10px] uppercase tracking-[0.16em] text-meltwater">
+                <p className="border-b border-rule bg-rule/40 px-3 py-1.5 text-2xs uppercase tracking-[0.16em] text-meltwater">
                   {group.heading}
                 </p>
                 <ul className="divide-y divide-rule/60">
@@ -256,7 +256,7 @@ export function ManifestBuilder() {
             // Padded to a thumb-sized target: the label is 10px small caps, which
             // renders 15px tall on a phone and is the only control here a finger
             // could miss.
-            className="mt-2 py-1.5 text-[10px] uppercase tracking-[0.16em] text-meltwater hover:text-crimson"
+            className="mt-2 py-1.5 text-2xs uppercase tracking-[0.16em] text-meltwater hover:text-crimson"
           >
             clear the manifest
           </button>
@@ -336,7 +336,7 @@ function Segmented<T extends string>({
           aria-checked={option.value === value}
           onClick={() => onChange(option.value)}
           className={cn(
-            "flex-1 px-1 py-2 text-[11px] uppercase tracking-[0.1em] transition-colors",
+            "flex-1 px-1 py-2 text-xs uppercase tracking-[0.1em] transition-colors",
             index > 0 && "border-l border-rule",
             option.value === value
               ? "bg-sonar/10 text-sonar"

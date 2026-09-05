@@ -15,7 +15,7 @@ import type { Manifest, PricedManifest } from "@/lib/logistics";
 
 const Placeholder = () => (
   <section className="hairline mt-8 pt-6" aria-hidden>
-    <p className="display text-[11px] uppercase tracking-[0.2em] text-meltwater">
+    <p className="display text-xs uppercase tracking-[0.2em] text-meltwater">
       Notarise the verdict
     </p>
     <p className="mt-3 text-xs leading-relaxed text-meltwater">Loading the devnet notary…</p>
