@@ -1,0 +1,556 @@
+{
+  "address": "DeadwBH8o2uqPTpdA5LDHmz6i7dv8LGtFFtmytKyxZ5F",
+  "metadata": {
+    "name": "deadweight",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "On-chain notary for a Deadweight pricing verdict. Devnet demonstration; moves no value."
+  },
+  "instructions": [
+    {
+      "name": "commit_pledge",
+      "docs": [
+        "Notarise one priced manifest.",
+        "",
+        "`index` must equal the registry's current count, which makes the ledger a",
+        "genuine append-only sequence rather than a bag of PDAs: a client cannot",
+        "quietly skip an unflattering entry and keep numbering."
+      ],
+      "discriminator": [
+        66,
+        216,
+        236,
+        68,
+        106,
+        232,
+        0,
+        59
+      ],
+      "accounts": [
+        {
+          "name": "registry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  103,
+                  105,
+                  115,
+                  116,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "pledge",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  101,
+                  100,
+                  103,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "donor"
+              },
+              {
+                "kind": "arg",
+                "path": "index"
+              }
+            ]
+          }
+        },
+        {
+          "name": "donor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "index",
+          "type": "u64"
+        },
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "PledgeArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "initialize_registry",
+      "docs": [
+        "Open the singleton registry. Idempotent by construction: the PDA has one",
+        "address, so a second call fails at account creation."
+      ],
+      "discriminator": [
+        189,
+        181,
+        20,
+        17,
+        174,
+        57,
+        249,
+        59
+      ],
+      "accounts": [
+        {
+          "name": "registry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  103,
+                  105,
+                  115,
+                  116,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Pledge",
+      "discriminator": [
+        161,
+        197,
+        121,
+        46,
+        99,
+        75,
+        169,
+        131
+      ]
+    },
+    {
+      "name": "Registry",
+      "discriminator": [
+        47,
+        174,
+        110,
+        246,
+        184,
+        182,
+        252,
+        218
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "PledgeCommitted",
+      "discriminator": [
+        230,
+        120,
+        166,
+        182,
+        143,
+        51,
+        182,
+        141
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "IndexOutOfOrder",
+      "msg": "A pledge index must equal the registry's current count."
+    },
+    {
+      "code": 6001,
+      "name": "EmptyManifest",
+      "msg": "A pledge must carry at least one manifest line."
+    },
+    {
+      "code": 6002,
+      "name": "TooManyLines",
+      "msg": "Too many manifest lines for one pledge."
+    },
+    {
+      "code": 6003,
+      "name": "EmptyItemId",
+      "msg": "A manifest line needs a catalogue id."
+    },
+    {
+      "code": 6004,
+      "name": "ItemIdTooLong",
+      "msg": "Catalogue id is longer than the account can store."
+    },
+    {
+      "code": 6005,
+      "name": "ZeroQuantity",
+      "msg": "A manifest line needs a positive quantity."
+    },
+    {
+      "code": 6006,
+      "name": "DeclaredNotPositive",
+      "msg": "Declared value must be positive."
+    },
+    {
+      "code": 6007,
+      "name": "VerdictDoesNotFollow",
+      "msg": "The verdict does not follow from the declared and net figures."
+    },
+    {
+      "code": 6008,
+      "name": "ArithmeticOverflow",
+      "msg": "Registry totals overflowed."
+    }
+  ],
+  "types": [
+    {
+      "name": "Bias",
+      "docs": [
+        "Which end of every sourced range the pricing used. Recorded because a verdict",
+        "without it is not checkable."
+      ],
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Generous"
+          },
+          {
+            "name": "Midpoint"
+          },
+          {
+            "name": "Harsh"
+          }
+        ]
+      }
+    },
+    {
+      "name": "LineItem",
+      "docs": [
+        "One catalogue line, as the manifest builder had it."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "item_id",
+            "docs": [
+              "Kept in step with `MAX_ITEM_ID`; `max_len` takes a literal."
+            ],
+            "type": "string"
+          },
+          {
+            "name": "quantity",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Mode",
+      "docs": [
+        "How the consignment travels. Nepal is landlocked, so `SeaPlusRoad` is a sea",
+        "leg to Kolkata and a road leg over Birgunj–Raxaul."
+      ],
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Air"
+          },
+          {
+            "name": "Road"
+          },
+          {
+            "name": "SeaPlusRoad"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Pledge",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "donor",
+            "type": "pubkey"
+          },
+          {
+            "name": "index",
+            "type": "u64"
+          },
+          {
+            "name": "declared_usd_cents",
+            "type": "i64"
+          },
+          {
+            "name": "net_usd_cents",
+            "type": "i64"
+          },
+          {
+            "name": "gross_weight_grams",
+            "type": "u64"
+          },
+          {
+            "name": "mode",
+            "type": {
+              "defined": {
+                "name": "Mode"
+              }
+            }
+          },
+          {
+            "name": "bias",
+            "type": {
+              "defined": {
+                "name": "Bias"
+              }
+            }
+          },
+          {
+            "name": "verdict",
+            "type": {
+              "defined": {
+                "name": "Verdict"
+              }
+            }
+          },
+          {
+            "name": "manifest_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "committed_at",
+            "type": "i64"
+          },
+          {
+            "name": "lines",
+            "docs": [
+              "Kept in step with `MAX_LINES`; `max_len` takes a literal."
+            ],
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "LineItem"
+                }
+              }
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PledgeArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "declared_usd_cents",
+            "docs": [
+              "What the donor says the goods are worth, in US cents. Always positive."
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "net_usd_cents",
+            "docs": [
+              "What arrives, net of freight, sorting, storage and disposal, in US cents.",
+              "Signed: a consignment that costs more to handle than it delivers is",
+              "negative, and that is the number this whole project exists to publish."
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "gross_weight_grams",
+            "type": "u64"
+          },
+          {
+            "name": "mode",
+            "type": {
+              "defined": {
+                "name": "Mode"
+              }
+            }
+          },
+          {
+            "name": "bias",
+            "type": {
+              "defined": {
+                "name": "Bias"
+              }
+            }
+          },
+          {
+            "name": "verdict",
+            "type": {
+              "defined": {
+                "name": "Verdict"
+              }
+            }
+          },
+          {
+            "name": "manifest_hash",
+            "docs": [
+              "SHA-256 of the canonical manifest JSON, so an off-chain manifest can be",
+              "proved to be the one that was priced without storing it all on-chain."
+            ],
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "lines",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "LineItem"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "PledgeCommitted",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "donor",
+            "type": "pubkey"
+          },
+          {
+            "name": "index",
+            "type": "u64"
+          },
+          {
+            "name": "declared_usd_cents",
+            "type": "i64"
+          },
+          {
+            "name": "net_usd_cents",
+            "type": "i64"
+          },
+          {
+            "name": "gross_weight_grams",
+            "type": "u64"
+          },
+          {
+            "name": "verdict",
+            "type": {
+              "defined": {
+                "name": "Verdict"
+              }
+            }
+          },
+          {
+            "name": "committed_at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Registry",
+      "docs": [
+        "Running totals across every pledge. `i128` because the sum of signed nets has",
+        "no reason to stay inside an i64 once the ledger is long."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "pledge_count",
+            "type": "u64"
+          },
+          {
+            "name": "declared_total_cents",
+            "type": "i128"
+          },
+          {
+            "name": "net_total_cents",
+            "type": "i128"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Verdict",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Lands"
+          },
+          {
+            "name": "Burdens"
+          },
+          {
+            "name": "BecomesAsh"
+          }
+        ]
+      }
+    }
+  ]
+}

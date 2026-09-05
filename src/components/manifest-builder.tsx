@@ -15,6 +15,7 @@ import { price, type Manifest, type Mode } from "@/lib/logistics";
 import { cn } from "@/lib/utils";
 
 import { LedgerTable } from "./ledger-table";
+import { Notary } from "./solana/notary";
 
 type Quantities = Record<string, number>;
 
@@ -291,6 +292,7 @@ export function ManifestBuilder() {
 
       <div className="lg:sticky lg:top-8">
         <LedgerTable result={result} />
+        <Notary manifest={manifest} result={result} />
       </div>
     </div>
   );

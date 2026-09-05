@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    // ES2020 rather than the Next default of ES2017: the chain layer builds u64
+    // seeds out of bigints, and the tests that mirror the program's i128
+    // arithmetic need bigint literals. tsc only type-checks here (noEmit) —
+    // what actually ships is whatever SWC compiles for the browserslist range.
+    "target": "ES2020",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,

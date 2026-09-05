@@ -15,9 +15,12 @@ export function SiteHeader() {
         <Link href="/" className="display text-sm uppercase tracking-[0.22em] text-paper">
           Deadweight
         </Link>
-        <nav aria-label="Site" className="flex items-baseline gap-5">
+        <nav aria-label="Site" className="flex flex-wrap items-baseline gap-x-5 gap-y-1">
           <Link href="/" className={LINK}>
             The ledger
+          </Link>
+          <Link href="/notary" className={LINK}>
+            Notary
           </Link>
           <Link href="/sources" className={LINK}>
             Sources

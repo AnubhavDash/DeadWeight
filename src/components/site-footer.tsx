@@ -33,8 +33,12 @@ export function SiteFooter() {
             Nothing here accepts money. Every giving link points off-site to the response&rsquo;s
             own appeal or to an agency running it. The Solana layer notarises a verdict on{" "}
             <span className="text-crimson">devnet</span> — a demonstration of a public,
-            tamper-evident ledger of what a consignment was priced at. It moves no value and is not
-            a donation channel.
+            tamper-evident ledger of what a consignment was priced at, and every entry it holds is
+            listed on{" "}
+            <Link href="/notary" className={LINK}>
+              the notary page
+            </Link>
+            . It moves no value and is not a donation channel.
           </p>
         </div>
 
