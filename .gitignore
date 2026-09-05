@@ -39,3 +39,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# anchor / solana
+# target/ holds the build artefacts and the program keypair. The keypair is the
+# upgrade authority for DeadwBH8o2uqPTpdA5LDHmz6i7dv8LGtFFtmytKyxZ5F, so it stays
+# out of the repo; the program id itself is public and lives in Anchor.toml.
+target
+.anchor
+**/*.rs.bk
+test-ledger
+.surfpool

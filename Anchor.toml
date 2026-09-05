@@ -1,0 +1,30 @@
+# Build with `anchor build --arch v0` (and `anchor test --arch v0`).
+#
+# Anchor 1.2.0 defaults to `--arch v3`, and the SBPFv3 ELF that platform-tools
+# v1.57 emits is rejected by the loader in litesvm 0.10 (`InvalidAccountData` out
+# of `add_program`), so the whole test suite fails before it runs a single
+# instruction. v0 is what every deployed program on devnet and mainnet runs, and
+# it is the arch these tests and the deployed artefact are both built at.
+
+skip_local_validator = true
+
+[toolchain]
+
+[features]
+resolution = true
+skip-lint = false
+
+[programs.devnet]
+deadweight = "DeadwBH8o2uqPTpdA5LDHmz6i7dv8LGtFFtmytKyxZ5F"
+
+[programs.localnet]
+deadweight = "DeadwBH8o2uqPTpdA5LDHmz6i7dv8LGtFFtmytKyxZ5F"
+
+[provider]
+cluster = "devnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "cargo test"
+
+[hooks]
