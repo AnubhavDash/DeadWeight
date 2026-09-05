@@ -10,10 +10,10 @@ const LINK = "text-paper/80 underline decoration-rule underline-offset-2 hover:t
 
 export function SiteFooter() {
   return (
-    <footer className="hairline mt-24 px-5 py-10 text-xs leading-relaxed text-meltwater sm:px-8">
+    <footer className="hairline mt-24 px-5 py-10 text-sm leading-relaxed text-meltwater sm:px-8">
       <div className="mx-auto grid max-w-6xl gap-8 sm:grid-cols-2 lg:grid-cols-3">
         <div className="space-y-2">
-          <p className="display text-xs uppercase tracking-[0.2em] text-paper">Deadweight</p>
+          <p className="display text-base uppercase tracking-[0.2em] text-paper">Deadweight</p>
           <p>
             Every figure on this site is produced by one deterministic pricing function and traced
             to a dated source. The{" "}
@@ -26,7 +26,7 @@ export function SiteFooter() {
         </div>
 
         <div className="space-y-2">
-          <p className="display text-xs uppercase tracking-[0.2em] text-paper">
+          <p className="display text-base uppercase tracking-[0.2em] text-paper">
             This app takes no donations
           </p>
           <p>
@@ -43,7 +43,7 @@ export function SiteFooter() {
         </div>
 
         <div className="space-y-2">
-          <p className="display text-xs uppercase tracking-[0.2em] text-paper">Credits</p>
+          <p className="display text-base uppercase tracking-[0.2em] text-paper">Credits</p>
           <p>
             Visual components from{" "}
             <a
