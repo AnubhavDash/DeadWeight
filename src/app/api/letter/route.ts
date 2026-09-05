@@ -44,20 +44,28 @@ export const maxDuration = 45;
 const ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models";
 
 /**
- * Newest first, with a model from the previous generation at the tail. The chain
- * is overridable by `GEMINI_MODELS` so a retired id is a config change rather
- * than a deploy, which is the failure mode these ids actually have.
+ * Newest first, oldest still-callable id at the tail. The chain is overridable by
+ * `GEMINI_MODELS` so a retired id is a config change rather than a deploy, which
+ * is exactly the failure mode these ids have: `gemini-2.5-flash` sat at the tail
+ * until 5 Sep 2026, when it began answering 404 "no longer available to new
+ * users" while still appearing in `GET /v1beta/models`. Being listed is not being
+ * callable, so the tail is a model this key has actually reached.
  */
-const DEFAULT_MODELS = ["gemini-3.8-flash", "gemini-3.5-flash", "gemini-2.5-flash"] as const;
+const DEFAULT_MODELS = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.5-flash"] as const;
 
-/** No thinking configuration is sent: the field moved with the Interactions API
- * and an unknown key is a 400 that would take the whole chain down with it. The
- * output budget is set wide enough that a thinking model still has room for the
- * letter, and a truncated candidate is treated as a miss and passed over. */
-const MAX_OUTPUT_TOKENS = 2048;
+/** No thinking configuration is sent: the field has moved once already, and a
+ * model that rejects it is a wasted link in the chain rather than a broken one —
+ * a 400 is logged and passed over like any other miss. What matters instead is
+ * headroom. Thinking tokens are drawn from this same budget, and at 2048 a live
+ * run spent the lot before the letter began and finished on `MAX_TOKENS`; a
+ * truncated draft is not a draft, so it was a miss. The letter itself is about
+ * 400 tokens. The rest of this is room to think in. */
+const MAX_OUTPUT_TOKENS = 8192;
 
-const PER_MODEL_TIMEOUT_MS = 12_000;
-const TOTAL_BUDGET_MS = 26_000;
+/** Long enough for a thinking model on a cold start, short enough that all three
+ * links plus the engine's own letter still fit inside `maxDuration`. */
+const PER_MODEL_TIMEOUT_MS = 16_000;
+const TOTAL_BUDGET_MS = 34_000;
 
 /* --- limits ------------------------------------------------------------- */
 
