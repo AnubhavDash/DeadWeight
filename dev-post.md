@@ -2,14 +2,14 @@
 title: "Deadweight: price your generosity before you ship it"
 published: false
 tags: weekendchallenge, solana, ai, nextjs
-cover_image: https://raw.githubusercontent.com/AnubhavDash/deadweight/main/docs/hero.png
+cover_image: https://raw.githubusercontent.com/AnubhavDash/DeadWeight/main/docs/hero.png
 description: A deterministic ledger that prices a donated coat's whole journey in USD, then spends the same money on what the response actually asked for — and lets no language model touch a single figure.
 ---
 
 *Built for the [DEV Weekend Challenge: Generosity Edition](https://dev.to/challenges).*
 
 **Live:** https://deadweight-jet.vercel.app
-**Repo:** https://github.com/AnubhavDash/deadweight
+**Repo:** https://github.com/AnubhavDash/DeadWeight
 
 ---
 
@@ -76,7 +76,7 @@ NET VALUE DELIVERED                                     $556.55
 Every row shows the rate, the range it came from, the publisher, the date, and
 the multiplication. The verdict is `LANDS`, `BURDENS`, or `BECOMES ASH`.
 
-![The real ledger in the browser: declared value $2,800.00 at the top, five expandable subtractions, and a net delivered value of $556.55 under a BURDENS verdict](https://raw.githubusercontent.com/AnubhavDash/deadweight/main/docs/ledger.png)
+![The real ledger in the browser: declared value $2,800.00 at the top, five expandable subtractions, and a net delivered value of $556.55 under a BURDENS verdict](https://raw.githubusercontent.com/AnubhavDash/DeadWeight/main/docs/ledger.png)
 
 Two things about that table matter more than the verdict.
 
@@ -107,7 +107,7 @@ the sources:
 > **+$2,074.32 more reaches the response** than the manifest above, for the money
 > already being spent.
 
-![The same money, sent differently: a card for 1,866 water purification tablets marked LANDS, with its own declared, delivered and percentage figures](https://raw.githubusercontent.com/AnubhavDash/deadweight/main/docs/instead.png)
+![The same money, sent differently: a card for 1,866 water purification tablets marked LANDS, with its own declared, delivered and percentage figures](https://raw.githubusercontent.com/AnubhavDash/DeadWeight/main/docs/instead.png)
 
 No new conversion table is introduced. Nothing is quoted that wasn't already
 quoted. The comparison is the engine disagreeing with itself about two ways to
@@ -274,7 +274,7 @@ accounts without being handed a schema. The figures in them came out of `price()
 and `pledgeArgsFor()` directly — I refused to type them by hand even once — and
 the program accepted them only because its own re-derivation agreed.
 
-![The notary page reading the live devnet registry: 2 entries, $5,600.00 declared, $1,113.10 delivered net, with the program and registry addresses printed above](https://raw.githubusercontent.com/AnubhavDash/deadweight/main/docs/notary.png)
+![The notary page reading the live devnet registry: 2 entries, $5,600.00 declared, $1,113.10 delivered net, with the program and registry addresses printed above](https://raw.githubusercontent.com/AnubhavDash/DeadWeight/main/docs/notary.png)
 
 And I got to test the permanence on myself, which I didn't plan. My first pledge
 reconstructed the manifest from an earlier draft of this post: 25 jackets, 10
@@ -361,7 +361,7 @@ enters the first load, the context is probed before anything mounts, and
 the same crate as a still image, and the no-WebGL and reduced-motion paths render
 byte-identical screenshots — I checked that headlessly rather than assuming it.
 
-![The same crate twice, side by side: the WebGL particle cloud on the left, the still SVG fallback under prefers-reduced-motion on the right](https://raw.githubusercontent.com/AnubhavDash/deadweight/main/docs/gpu-off.png)
+![The same crate twice, side by side: the WebGL particle cloud on the left, the still SVG fallback under prefers-reduced-motion on the right](https://raw.githubusercontent.com/AnubhavDash/DeadWeight/main/docs/gpu-off.png)
 
 The crate is `aria-hidden` and carries no figure. Every number on the page
 survives its absence, which is the only accessibility promise worth making about a
@@ -422,7 +422,7 @@ Relief](https://www.directrelief.org/), or [UNICEF
 Nepal](https://www.unicef.org/nepal/).
 
 **Live:** https://deadweight-jet.vercel.app
-**Repo:** https://github.com/AnubhavDash/deadweight
+**Repo:** https://github.com/AnubhavDash/DeadWeight
 
 *Built for the DEV Weekend Challenge: Generosity Edition. Categories: Solana,
 Google AI, ElevenLabs. Price your generosity before you ship it.*

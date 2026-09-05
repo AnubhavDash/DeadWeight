@@ -17,16 +17,16 @@ actually asked for, prices *that* the same way, and shows you the difference.
 
 Nothing here says don't give. It says give the thing that arrives.
 
-Built for the **DEV Weekend Challenge: Generosity Edition** (`#weekendchallenge`),
+Built for the [DEV Weekend Challenge: Generosity Edition](https://dev.to/challenges),
 set against the response to the glacier-linked debris flow that came down the
 Bhotekoshi and Trishuli on **26 August 2026**, and the **US$49.6 million flash
 appeal** the UN and partners launched for 84,000 people on 4 September 2026.
 Cash assistance is first on that appeal's own priority list. That ordering is
 the whole argument of this project, and it is not ours — it is the response's.
 
-**Live:** [deadweight-jet.vercel.app](https://deadweight-jet.vercel.app) · **Tag:**
-`#weekendchallenge` · **Prize technologies:** Solana, Google AI (Gemini),
-ElevenLabs
+**Live demo:** https://deadweight-jet.vercel.app
+
+**Video walkthrough:** *link goes here on submission*
 
 ![The Deadweight header: the headline "Price your generosity before you ship it." beside a crate drawn as a WebGL particle cloud](docs/hero.png)
 
@@ -121,8 +121,12 @@ npm run dev          # http://localhost:3000
 that wants one degrades honestly without it: with no `GEMINI_API_KEY` the letter
 is the engine's own prose, with no `ELEVENLABS_API_KEY` the narration falls back
 to the browser's own speech synthesis, with no `LETTER_SECRET` the seal uses a
-per-process random key. Copy `.env.example` to `.env.local` if you have keys.
-Every key is read in a route handler and **none is ever sent to the browser**.
+per-process random key — which holds inside one instance and, across several,
+quietly drops the offered letter and speaks the engine's instead, so a deployment
+running on more than one instance should set it (`openssl rand -base64 32`; there
+is no service to get it from). Copy `.env.example` to `.env.local` if you have
+keys — it says where each one comes from and what breaks without it. Every key is
+read in a route handler and **none is ever sent to the browser**.
 
 ```bash
 npm run typecheck    # tsc --noEmit, strict
@@ -282,6 +286,24 @@ headline, the figures and every control are identical.*
 
 The crate is decorative and marked `aria-hidden`. It carries no figure. Every
 number on the page survives its absence.
+
+---
+
+## Prize categories
+
+Three of the four, and each of them is load-bearing — pulled out, the feature it
+carries stops working rather than getting quieter.
+
+| Prize category | What it does here |
+| --- | --- |
+| **Best Use of Solana** | An Anchor program on devnet, `DeadwBH8o2uqPTpdA5LDHmz6i7dv8LGtFFtmytKyxZ5F`, notarises a verdict — after re-deriving it. `commit_pledge` recomputes the efficiency from the declared and net cents it is handed and **rejects the transaction when the submitted verdict disagrees**, so the chain audits the app instead of printing receipts for it. `/notary` reads the registry and every pledge account back live in the browser; the running totals it prints are the program's own. Devnet only, labelled a demonstration wherever it appears, moving no money — this app collects nothing. |
+| **Best Use of Google AI** | Gemini writes the letter to the person who was about to ship the box, and is structurally forbidden from producing a number. The prompt contains no digits at all; a figure reaches the page only through a `{{token}}` placeholder the server fills from the engine afterwards, and `normalize()` discards the **entire** draft if a digit or a quantity word appears anywhere outside one. A fallback chain across three model ids, configurable without a deploy, keeps it standing when one is retired mid-challenge — which happened on 5 September. |
+| **Best Use of ElevenLabs** | The letter is read aloud in `eleven_multilingual_v2`, and only prose this build vouches for can be spoken: `/api/letter` returns an HMAC seal with the text, `/api/narrate` verifies it before spending a character, and an unsealed draft is quietly swapped for the deterministic letter the engine writes itself. With no key, or when synthesis fails, the browser's own speech synthesis reads the same words — the panel never goes silent. |
+
+Snowflake is the fourth and it is absent, because there is no warehouse-shaped
+problem here to give it: the entire rate table is fourteen cells in a TypeScript
+file, and every one of them is printed on `/sources` with its range, its date,
+its confidence and the sentence it came out of.
 
 ---
 
