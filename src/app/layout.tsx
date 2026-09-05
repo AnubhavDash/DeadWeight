@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Archivo, Inter, JetBrains_Mono } from "next/font/google";
+
+import { SiteHeader } from "@/components/site-header";
+
 import "./globals.css";
 
 // Archivo carries a width axis, so the display face can be condensed without
@@ -69,6 +72,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${display.variable} ${body.variable} ${ledger.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-silt text-paper">
+        <SiteHeader />
         {children}
       </body>
     </html>

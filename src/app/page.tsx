@@ -1,69 +1,181 @@
-import Image from "next/image";
+/**
+ * The landing page. Everything numeric on it comes either from `data/crisis.ts`
+ * (figures that do not move, each dated and sourced) or from the pricing engine
+ * by way of `<ManifestBuilder />`. No figure is written into this prose, so the
+ * copy cannot drift away from the table it describes.
+ */
+
+import { ManifestBuilder } from "@/components/manifest-builder";
+import { SiteFooter } from "@/components/site-footer";
+import { citation, citationLabel, type CitationId } from "@/data/citations";
+import { APPEALS, CRISIS, type CrisisFact } from "@/data/crisis";
+import { APPEAL_USD_PER_PERSON } from "@/data/rates";
+import { formatUsdWhole, usd } from "@/lib/money";
+
+function Source({ id }: { id: CitationId }) {
+  return (
+    <a
+      href={citation(id).url}
+      target="_blank"
+      rel="noreferrer noopener"
+      className="underline decoration-rule underline-offset-2 hover:text-sonar"
+    >
+      {citationLabel(id)}
+    </a>
+  );
+}
+
+function Fact({ label, fact }: { label: string; fact: CrisisFact }) {
+  return (
+    <div className="border-l border-rule pl-3">
+      <p className="text-[10px] uppercase tracking-[0.16em] text-meltwater">{label}</p>
+      <p className="mt-1 text-sm text-paper/90">{fact.value}</p>
+      <p className="ledger mt-1 text-[10px] text-meltwater">
+        as of {fact.asOf} · <Source id={fact.source} />
+      </p>
+    </div>
+  );
+}
+
+const SECTION = "mx-auto w-full max-w-6xl px-5 sm:px-8";
+const EYEBROW = "display text-[11px] uppercase tracking-[0.2em] text-meltwater";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <>
+      <main className="flex-1 pt-14 sm:pt-20">
+        <header className={SECTION}>
+          <p className={EYEBROW}>
+            {CRISIS.name} · {CRISIS.locus}
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+          <h1 className="mt-5 max-w-4xl text-4xl leading-[1.05] sm:text-6xl lg:text-7xl">
+            Price your generosity
+            <br />
+            before you ship it.
+          </h1>
+          <div className="mt-7 max-w-2xl space-y-4 text-base leading-relaxed text-paper/85">
+            <p>
+              This is a tool for protecting generosity from being wasted. The impulse to put
+              something in a box and send it is the right impulse. What is in the box is the part
+              nobody prices — so this page prices it, in USD, against the response that is actually
+              running in Nepal right now.
+            </p>
+            <p className="text-meltwater">
+              A donated coat has to be flown, cleared, sorted, warehoused and — often enough —
+              burned. Every one of those steps has a published rate. Put a consignment on the
+              manifest below and the ledger works it the way a logistics officer would: at the
+              kindest end of every sourced range, so a bad verdict is one you cannot argue with.
+              Then it tells you what the same money delivers as cash.
+            </p>
+            <p className="border-l-2 border-sonar/50 pl-4 text-paper">
+              Nothing here says don&rsquo;t give. It says give the thing that arrives.
+            </p>
+          </div>
+        </header>
+
+        <section className={`${SECTION} mt-16 sm:mt-20`} aria-labelledby="response">
+          <h2 id="response" className={EYEBROW}>
+            The response you would be sending into
+          </h2>
+          <div className="mt-5 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
+            <Fact label="Districts hit" fact={CRISIS.districts} />
+            <Fact label="People affected" fact={CRISIS.peopleAffected} />
+            <Fact label="Children affected" fact={CRISIS.childrenAffected} />
+            <Fact label="Children needing clean water" fact={CRISIS.childrenNeedingWash} />
+          </div>
+
+          <div className="mt-10 grid gap-8 border border-rule p-5 sm:p-6 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)]">
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.16em] text-meltwater">
+                The flash appeal
+              </p>
+              <p className="ledger mt-2 text-3xl text-paper">
+                {formatUsdWhole(usd(CRISIS.appeal.usd))}
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-meltwater">
+                for {CRISIS.appeal.people.toLocaleString("en-US")} people, launched{" "}
+                {CRISIS.appeal.launched}. That is{" "}
+                <span className="ledger text-paper/90">
+                  {formatUsdWhole(usd(APPEAL_USD_PER_PERSON.low))}
+                </span>{" "}
+                a person for the whole response — the yardstick the ledger measures your consignment
+                against. <Source id={CRISIS.appeal.source} />
+              </p>
+            </div>
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.16em] text-meltwater">
+                What the appeal asked for, in the order it asked
+              </p>
+              <ol className="mt-3 grid gap-y-1.5 sm:grid-cols-2">
+                {CRISIS.appeal.priorities.map((priority, index) => (
+                  <li key={priority} className="flex gap-2.5 text-sm">
+                    <span className="ledger text-[11px] text-meltwater">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span className={index === 0 ? "text-sonar" : "text-paper/85"}>{priority}</span>
+                  </li>
+                ))}
+              </ol>
+              <p className="mt-3 text-xs leading-relaxed text-meltwater">
+                Cash is first. That ordering is the most important fact on this page: the
+                response&rsquo;s own priority list opens with the thing donors are least inclined to
+                send.
+              </p>
+            </div>
+          </div>
+
+          <p className="mt-6 max-w-3xl text-xs leading-relaxed text-meltwater">
+            <span className="text-crimson">The death and missing toll is not printed here.</span>{" "}
+            Within days of the event, published figures ran 160 → 359 → 538 → 579 → over 1,250, with
+            thousands missing, depending on the source and the hour. A number that behaves like that
+            gets fetched live with its timestamp and its attribution, or it does not get shown.
+            Hardcoding it would be the exact failure this project is about.
+          </p>
+        </section>
+
+        <section className={`${SECTION} mt-20 sm:mt-24`} aria-labelledby="ledger">
+          <h2 id="ledger" className="display text-2xl uppercase tracking-[0.14em] text-paper">
+            The manifest
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-meltwater">
+            Build a consignment. Every line of the ledger opens to show the rate it used, the source
+            it came from, the date, and the arithmetic. Where a publisher blocked automated
+            retrieval, it says so.
+          </p>
+          <div className="mt-10">
+            <ManifestBuilder />
+          </div>
+        </section>
+
+        <section className={`${SECTION} mt-24`} aria-labelledby="instead">
+          <h2 id="instead" className="display text-2xl uppercase tracking-[0.14em] text-paper">
+            Where to send it instead
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-meltwater">
+            Deadweight accepts nothing. Every link below goes off this site, to the response&rsquo;s
+            own appeal or to an agency running it, and each of them can buy in the region what a
+            container of goods spends its whole value trying to get there.
+          </p>
+          <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+            {APPEALS.map((appeal) => (
+              <li key={appeal.url}>
+                <a
+                  href={appeal.url}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="block h-full border border-rule p-4 transition-colors hover:border-sonar/60 hover:bg-sonar/5"
+                >
+                  <span className="block text-sm text-paper">{appeal.name}</span>
+                  <span className="mt-1 block text-xs leading-relaxed text-meltwater">
+                    {appeal.note}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
       </main>
-    </div>
+      <SiteFooter />
+    </>
   );
 }
