@@ -7,7 +7,7 @@
  * and the Anchor program use. Nothing here computes a figure of its own.
  */
 
-import { useMemo, useState } from "react";
+import { type RefObject, useEffect, useMemo, useRef, useState } from "react";
 
 import { CATALOG, type CatalogItem, type ItemClass } from "@/data/catalog";
 import type { Bias } from "@/data/rates";
@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 import { InsteadPanel } from "./instead-panel";
 import { LedgerTable } from "./ledger-table";
 import { LetterPanel } from "./letter-panel";
+import { VerdictDock } from "./verdict-dock";
 import { Notary } from "./solana/notary";
 
 type Quantities = Record<string, number>;
@@ -86,8 +87,20 @@ function stepFor(item: CatalogItem): number {
   return 5;
 }
 
+/**
+ * 40px square, which is a thumb rather than a cursor. The old 32px cost nothing
+ * on a desktop and was the most-tapped control on the page on a phone.
+ */
 const STEPPER =
-  "flex size-8 shrink-0 items-center justify-center border border-rule text-meltwater transition-colors hover:border-sonar hover:text-sonar disabled:opacity-30 disabled:hover:border-rule disabled:hover:text-meltwater";
+  "flex size-10 shrink-0 items-center justify-center border border-rule text-lg text-meltwater transition-colors hover:border-sonar hover:text-sonar disabled:opacity-30 disabled:hover:border-rule disabled:hover:text-meltwater";
+
+/**
+ * `on the appeal` / `prohibited`, set so a wrapped tag cannot read as prose.
+ * `whitespace-nowrap` because at 382px the tag lands past the end of the
+ * weight-and-price line and would otherwise break inside itself — "ON THE" on
+ * one line and "APPEAL" on the next reads as two labels rather than one.
+ */
+const TAG = "ml-2 whitespace-nowrap text-2xs uppercase tracking-[0.14em]";
 
 function ItemRow({
   item,
@@ -102,20 +115,31 @@ function ItemRow({
   const active = quantity > 0;
 
   return (
-    <li className={cn("px-3 py-3 transition-colors", active && "bg-rule/25")}>
-      <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
-        <div className="min-w-[10rem] flex-1">
-          <label htmlFor={`qty-${item.id}`} className={cn("block text-sm", active ? "text-paper" : "text-paper/80")}>
+    <li className={cn("px-3 py-2.5 transition-colors", active && "bg-rule/25")}>
+      {/*
+        Two stacked bands on a phone, one row from `sm` up. At 382px the row has
+        318px of usable width, and a name like "Water purification tablets (strip
+        of 10)" needs all of it — sharing the line with a 144px stepper cluster
+        pushed both the name and the weight-and-price line onto three wraps each.
+        Stacked, the name gets the full width, the metadata fits on one line, and
+        all fourteen steppers align into a column down the right edge.
+      */}
+      <div className="flex flex-col gap-1.5 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between sm:gap-x-4">
+        <div className="min-w-0 sm:min-w-[10rem] sm:flex-1">
+          <label
+            htmlFor={`qty-${item.id}`}
+            className={cn("block text-sm", active ? "text-paper" : "text-paper/80")}
+          >
             {item.label}
           </label>
           <p className="ledger mt-0.5 text-xs text-meltwater">
             {item.unitWeightKg} kg · ${item.declaredUsd.toFixed(2)} per {item.unit}
-            {item.onAppeal ? <span className="ml-2 text-sonar">on the appeal</span> : null}
-            {item.prohibited ? <span className="ml-2 text-crimson">prohibited</span> : null}
+            {item.onAppeal ? <span className={cn(TAG, "text-sonar")}>on the appeal</span> : null}
+            {item.prohibited ? <span className={cn(TAG, "text-crimson")}>prohibited</span> : null}
           </p>
         </div>
 
-        <div className="flex items-center gap-1">
+        <div className="flex shrink-0 items-center gap-1 self-end sm:self-auto">
           <button
             type="button"
             className={STEPPER}
@@ -134,7 +158,7 @@ function ItemRow({
             value={quantity === 0 ? "" : quantity}
             placeholder="0"
             onChange={(event) => onChange(Math.max(0, Math.floor(Number(event.target.value) || 0)))}
-            className="ledger h-8 w-16 border border-rule bg-transparent px-2 text-center text-sm text-paper focus:border-sonar focus:outline-none"
+            className="ledger h-10 w-16 border border-rule bg-transparent px-2 text-center text-sm text-paper focus:border-sonar focus:outline-none"
           />
           <button
             type="button"
@@ -149,11 +173,14 @@ function ItemRow({
 
       {item.note ? (
         <details className="group mt-2">
-          <summary className="w-fit cursor-pointer list-none text-2xs uppercase tracking-[0.16em] text-meltwater hover:text-sonar">
+          {/* 13px small caps in a 19px line box is under every touch-target floor
+              there is, and there are fourteen of them. `min-h-8` is the fix that
+              costs the least page length. */}
+          <summary className="flex min-h-8 w-fit cursor-pointer list-none items-center text-2xs uppercase tracking-[0.16em] text-meltwater hover:text-sonar">
             <span className="group-open:hidden">why this matters</span>
             <span className="hidden group-open:inline">hide</span>
           </summary>
-          <p className="mt-1.5 border-l border-rule pl-3 text-sm leading-relaxed text-meltwater">
+          <p className="border-l border-rule pl-3 text-sm leading-relaxed text-meltwater">
             {item.note}
           </p>
         </details>
@@ -169,6 +196,10 @@ export function ManifestBuilder() {
   const [mode, setMode] = useState<Mode>(PRESETS[0].mode);
   const [bias, setBias] = useState<Bias>("generous");
   const [valueLocally, setValueLocally] = useState(false);
+
+  const pickerRef = useRef<HTMLDivElement>(null);
+  const ledgerRef = useRef<HTMLDivElement>(null);
+  const docked = useDocked(pickerRef, ledgerRef);
 
   const manifest = useMemo<Manifest>(
     () => ({
@@ -190,7 +221,7 @@ export function ManifestBuilder() {
 
   return (
     <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,27rem)] lg:gap-14">
-      <div>
+      <div ref={pickerRef}>
         <fieldset className="mb-8">
           <legend className={LEGEND}>Start from a real one</legend>
           <div className="grid gap-2 sm:grid-cols-2">
@@ -253,10 +284,9 @@ export function ManifestBuilder() {
           <button
             type="button"
             onClick={() => setQuantities({})}
-            // Padded to a thumb-sized target: the label is 10px small caps, which
-            // renders 15px tall on a phone and is the only control here a finger
-            // could miss.
-            className="mt-2 py-1.5 text-2xs uppercase tracking-[0.16em] text-meltwater hover:text-crimson"
+            // Padded to a thumb-sized target: the label is 13px small caps, which
+            // renders 19px tall and is the only control here a finger could miss.
+            className="mt-1 py-2.5 text-2xs uppercase tracking-[0.16em] text-meltwater hover:text-crimson"
           >
             clear the manifest
           </button>
@@ -285,7 +315,9 @@ export function ManifestBuilder() {
             type="checkbox"
             checked={valueLocally}
             onChange={(event) => setValueLocally(event.target.checked)}
-            className="mt-0.5 size-4 shrink-0 accent-[var(--sonar)]"
+            // 20px rather than 16px: the label wraps the input so the whole
+            // sentence is the target, but the box itself is what a thumb aims at.
+            className="mt-0.5 size-5 shrink-0 accent-[var(--sonar)]"
           />
           <span>
             Value the usable share at what the same goods cost in the region, not at what the donor
@@ -296,7 +328,9 @@ export function ManifestBuilder() {
       </div>
 
       <div className="lg:sticky lg:top-8">
-        <LedgerTable result={result} />
+        <div ref={ledgerRef} className="scroll-mt-6">
+          <LedgerTable result={result} />
+        </div>
         <InsteadPanel
           manifest={manifest}
           result={result}
@@ -311,8 +345,48 @@ export function ManifestBuilder() {
         <LetterPanel manifest={manifest} bias={bias} valueLocally={valueLocally} />
         <Notary manifest={manifest} result={result} />
       </div>
+
+      <VerdictDock
+        result={result}
+        shown={docked}
+        onJump={() => ledgerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
+      />
     </div>
   );
+}
+
+/**
+ * True while the picker is on screen and the ledger is not — the only window in
+ * which a reader is changing a figure they cannot see. One observer, two targets,
+ * no scroll listener.
+ */
+function useDocked(
+  picker: RefObject<HTMLDivElement | null>,
+  ledger: RefObject<HTMLDivElement | null>,
+) {
+  const [seen, setSeen] = useState({ picker: false, ledger: false });
+
+  useEffect(() => {
+    const first = picker.current;
+    const second = ledger.current;
+    if (!first || !second) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      setSeen((current) => {
+        const next = { ...current };
+        for (const entry of entries) {
+          if (entry.target === first) next.picker = entry.isIntersecting;
+          if (entry.target === second) next.ledger = entry.isIntersecting;
+        }
+        return next;
+      });
+    });
+    observer.observe(first);
+    observer.observe(second);
+    return () => observer.disconnect();
+  }, [picker, ledger]);
+
+  return seen.picker && !seen.ledger;
 }
 
 function Segmented<T extends string>({
@@ -336,7 +410,7 @@ function Segmented<T extends string>({
           aria-checked={option.value === value}
           onClick={() => onChange(option.value)}
           className={cn(
-            "flex-1 px-1 py-2 text-xs uppercase tracking-[0.1em] transition-colors",
+            "flex-1 px-1 py-3 text-xs uppercase tracking-[0.1em] transition-colors",
             index > 0 && "border-l border-rule",
             option.value === value
               ? "bg-sonar/10 text-sonar"

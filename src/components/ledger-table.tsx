@@ -20,7 +20,12 @@ function CellNote({ cell, assumption }: { cell?: Cell; assumption?: boolean }) {
 
   return (
     <details className="group mt-1.5">
-      <summary className="flex cursor-pointer list-none items-center gap-2 text-2xs uppercase tracking-[0.16em] text-meltwater transition-colors hover:text-sonar">
+      {/* A thumb below `lg`, a cursor above it. The 13px label renders in a 19px
+          line box, which is under the 24px target floor — but there are seven of
+          these in the ledger, and paying 13px each on the desktop rail would add
+          ~90px to a table that has to stay inside a laptop viewport while it is
+          sticky. The floor only matters where the tapping happens. */}
+      <summary className="flex min-h-8 cursor-pointer list-none items-center gap-2 text-2xs uppercase tracking-[0.16em] text-meltwater transition-colors hover:text-sonar lg:min-h-0">
         <span className="group-open:hidden">source</span>
         <span className="hidden group-open:inline">hide</span>
         {flagged ? (
@@ -90,7 +95,12 @@ function Row({ line }: { line: LedgerLine }) {
   );
 }
 
-const VERDICT_TONE: Record<string, string> = {
+/**
+ * One verdict, one colour, wherever it is printed. The border class is inert on
+ * anything that does not set a border width, which is what lets `<VerdictDock />`
+ * reuse this map for a bare span instead of keeping a second copy.
+ */
+export const VERDICT_TONE: Record<string, string> = {
   LANDS: "text-sonar border-sonar/40",
   BURDENS: "text-paper border-rule",
   BECOMES_ASH: "text-crimson border-crimson/40",

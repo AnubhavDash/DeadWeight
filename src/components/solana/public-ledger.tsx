@@ -144,7 +144,10 @@ function EntryCard({ entry }: { entry: Entry }) {
       </dl>
 
       <details className="group mt-3">
-        <summary className="w-fit cursor-pointer list-none text-2xs uppercase tracking-[0.16em] text-meltwater hover:text-sonar">
+        {/* 13px small caps sits in a 19px line box, under the 24px target floor.
+            Given a thumb the rest of the way below `lg`, where the phone layout
+            is the one being tapped. */}
+        <summary className="flex min-h-8 w-fit cursor-pointer list-none items-center text-2xs uppercase tracking-[0.16em] text-meltwater hover:text-sonar lg:min-h-0">
           <span className="group-open:hidden">what was on it</span>
           <span className="hidden group-open:inline">hide</span>
         </summary>

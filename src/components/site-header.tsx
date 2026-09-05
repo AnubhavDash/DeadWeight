@@ -28,9 +28,10 @@
  *
  * `py-2 -my-2` gives the text links the rest of the 24px a thumb needs without
  * changing where they sit; the Give box gets there on real padding instead,
- * since its border has to enclose something. At 382px the nav wraps under the
- * wordmark, which is the correct outcome — one dominant name, four full-height
- * targets.
+ * since its border has to enclose something. At 382px the four destinations sit
+ * in a 2x2 grid under the wordmark — one dominant name, four full-height
+ * targets, and two rows that start at the same two x positions rather than
+ * wherever the wrap happened to fall.
  */
 
 import Link from "next/link";
@@ -78,7 +79,7 @@ const PAGES = [
 ] as const;
 
 const LINK =
-  "relative -my-2 py-2 text-base uppercase tracking-[0.16em] transition-colors";
+  "relative -my-2 justify-self-start py-2 text-base uppercase tracking-[0.16em] transition-colors";
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -98,7 +99,16 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav aria-label="Site" className="flex flex-wrap items-center gap-x-5 gap-y-2">
+        <nav
+          aria-label="Site"
+          // The wordmark takes 311 of the 342px a 382px phone has, so the four
+          // destinations always land on their own line or two. Wrapping them left
+          // each row starting at a different x; a 2x2 grid puts the second row
+          // under the first, which is the difference between a header that looks
+          // laid out and one that looks overflowed. From `sm` up the whole nav
+          // fits on one line and the grid is dropped.
+          className="grid w-full grid-cols-2 items-center gap-x-5 gap-y-2 sm:flex sm:w-auto sm:flex-wrap"
+        >
           {PAGES.map((page) => {
             const active = pathname === page.href;
             return (
@@ -121,7 +131,7 @@ export function SiteHeader() {
             href="https://nepal.un.org/en"
             target="_blank"
             rel="noreferrer noopener"
-            className="border border-sonar/45 px-3 py-1.5 text-base uppercase tracking-[0.16em] text-sonar transition-colors hover:border-sonar hover:bg-sonar/10"
+            className="justify-self-start border border-sonar/45 px-3 py-1.5 text-base uppercase tracking-[0.16em] text-sonar transition-colors hover:border-sonar hover:bg-sonar/10"
           >
             Give <span aria-hidden="true">→</span>
           </a>
