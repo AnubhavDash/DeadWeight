@@ -285,12 +285,13 @@ number on the page survives its absence.
 
 ---
 
-## Dependencies, and the seven advisories
+## Dependencies, and the eight advisories
 
-GitHub reported **seven** advisories against the default branch — 1 critical, 4
-high, 2 moderate. Six are gone. The seventh is still there on purpose, and this
-section says why, because "we ran `npm audit fix`" is not an answer and neither
-is a green badge.
+GitHub reported **eight** advisories against the default branch — 1 critical, 4
+high, 2 moderate, 1 low. Seven are in `package-lock.json` and one is in
+`Cargo.lock`, which is easy to miss because `npm audit` cannot see it. Six are
+gone. Two remain, and both remain on purpose, and this section says why — because
+"we ran `npm audit fix`" is not an answer and neither is a green badge.
 
 | Advisory | Package | Severity | Now |
 | --- | --- | --- | --- |
@@ -300,7 +301,8 @@ is a green badge.
 | [GHSA-w3rx-r6r6-pgpr](https://github.com/advisories/GHSA-w3rx-r6r6-pgpr) | `image-size` | high | **gone** — package no longer installed |
 | [GHSA-5p2g-fcmc-qvqq](https://github.com/advisories/GHSA-5p2g-fcmc-qvqq) | `image-size` | high | **gone** — same |
 | [GHSA-w5hq-g745-h8pq](https://github.com/advisories/GHSA-w5hq-g745-h8pq) | `uuid` | moderate | fixed — overridden to **11.1.1** |
-| [GHSA-528h-pc64-c93x](https://github.com/advisories/GHSA-528h-pc64-c93x) | `stream-json` | moderate | **stays** — unfixable and unreachable |
+| [GHSA-528h-pc64-c93x](https://github.com/advisories/GHSA-528h-pc64-c93x) | `stream-json` | moderate | **stays** — unfixable, unreachable |
+| [GHSA-cq8v-f236-94qc](https://github.com/advisories/GHSA-cq8v-f236-94qc) | `rand` (Rust) | low | **stays** — test-only, unfixable, unreachable |
 
 **The critical one.** `vitest` 3.2.4 can be made to read and execute an arbitrary
 file *when its UI server is listening*. This project never runs `--ui`, so it was
@@ -340,7 +342,7 @@ the check that they agree. The flag also applies to `npx` invocations run from
 this directory, which is how `anchor idl init` came to fail on a missing
 `@solana/kit`; that one needs `npm_config_legacy_peer_deps=false` in front of it.
 
-**The one that stays.** `stream-json` 1.9.1, under `jayson`, under
+**The first one that stays.** `stream-json` 1.9.1, under `jayson`, under
 `@solana/web3.js`: its `pick`/`ignore`/`filter`/`replace` filters are O(depth²),
 so a small crafted JSON document can block the event loop. It cannot be bumped —
 the patched line is 3.5.0+, which is pure ESM with an `exports` map that does not
@@ -350,19 +352,46 @@ breaks the caller. And it cannot be reached from this app: those filters live in
 `jayson` entry point — `jayson/lib/client/browser` — which pulls in `uuid` and a
 request builder and no stream parser at all.
 
-So it is documented rather than dismissed. `npm audit` now ends on `2 moderate
-severity vulnerabilities`, which is that one advisory counted twice — once against
-`stream-json` and once against `jayson` for depending on it — and nothing else.
-The lockfile carries 979 packages. Everything above was re-verified afterwards:
-`tsc --noEmit`, `eslint src`, the 194 TypeScript tests, `next build`, and both
-pages loaded in headless Chrome with no console error and no uncaught exception.
-The wallet modal still mounts.
+`npm audit` now ends on `2 moderate severity vulnerabilities`, which is that one
+advisory counted twice — once against `stream-json` and once against `jayson` for
+depending on it — and nothing else. The lockfile carries 979 packages.
 
 It also says `fix available via npm audit fix`, which is misleading here: `jayson`
 depends on `stream-json: ^1.9.1`, so a plain `npm audit fix` cannot reach 3.x and
 changes nothing at all. Only `npm audit fix --force` crosses that major, and it
 crosses it into a caller that then cannot `require` its own parser. That is the
 one instruction in this section not to follow.
+
+**The second one that stays is not a JavaScript package at all**, which is why it
+is worth its own paragraph: Dependabot also reads `Cargo.lock`, and `npm audit`
+never will. `rand` 0.7.3 is unsound — safe code can reach undefined behaviour —
+but only when a **custom `log` logger** calls into `rand`'s thread-local generator
+and that generator reseeds inside the logging call. There is no custom logger in
+this repository, in the program or in the tests.
+
+It is also not in the program. The deployed crate's entire normal dependency graph
+is `anchor-lang 1.2.0`; `cargo tree -e normal` does not contain `rand` at any
+version. It arrives on the **dev** edge only, through the test harness:
+
+```
+rand 0.7.3 ← libsecp256k1 0.6.0 ← agave-syscalls 3.1.14 ← litesvm 0.10.0 [dev]
+```
+
+And it cannot be moved. `libsecp256k1` 0.6.0 asks for `rand = "^0.7"`, 0.7.3 is
+the last release on that line, and the advisory's fix is 0.8.6 — a different major
+for a `0.x` crate. Cargo says so itself rather than being taken on my word:
+
+```
+error: failed to select a version for the requirement `rand = "^0.7"`
+candidate versions found which didn't match: 0.8.6
+required by package `libsecp256k1 v0.6.0`
+```
+
+So both survivors are documented rather than dismissed, and neither is in
+anything a user's browser or the chain ever loads. Everything above was
+re-verified afterwards: `tsc --noEmit`, `eslint src`, the 194 TypeScript tests,
+`next build`, and both pages loaded in headless Chrome with no console error and
+no uncaught exception. The wallet modal still mounts.
 
 ---
 

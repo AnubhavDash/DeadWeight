@@ -313,23 +313,32 @@ is the freight and the sorting and the disposal — which is the actual claim.
 **Any way to give Deadweight money.** No payment path in the codebase. Not
 disabled — absent.
 
-**A green audit badge I hadn't earned.** GitHub reported seven advisories on the
-default branch: 1 critical, 4 high, 2 moderate. Six are gone — a `vitest` patch
-bump for the critical, `overrides` pinning `toml` to 4.3.0 and `uuid` to 11.1.1,
-and **React Native uninstalled entirely**, which took metro and 69 packages with
-it and removed two unpatchable `image-size` DoS advisories that had no fix to
+**A green audit badge I hadn't earned.** GitHub reported eight advisories on the
+default branch: 1 critical, 4 high, 2 moderate, 1 low. Six are gone — a `vitest`
+patch bump for the critical, `overrides` pinning `toml` to 4.3.0 and `uuid` to
+11.1.1, and **React Native uninstalled entirely**, which took metro and 69 packages
+with it and removed two unpatchable `image-size` DoS advisories that had no fix to
 install. (`@solana-mobile/wallet-adapter-mobile` declares `react-native` as a
 non-optional peer, npm dutifully installs it, and nothing in a web app ever
 resolves the `index.native.js` that needs it. Hence `legacy-peer-deps=true`, with
 the reasoning written out in `.npmrc`.)
 
-The seventh stays, and the README says so in full: `stream-json` 1.9.1 under
-`jayson`, a moderate O(depth²) parser DoS. It can't be bumped — the patched line
-is pure ESM whose `exports` map doesn't answer `jayson`'s
+Two stay, and the README says why in full. `stream-json` 1.9.1 under `jayson` is a
+moderate O(depth²) parser DoS. It can't be bumped — the patched line is pure ESM
+whose `exports` map doesn't answer `jayson`'s
 `require('stream-json/streamers/StreamValues')` — and it can't be reached, because
 the vulnerable filters live in `jayson`'s TCP and TLS transports and
 `@solana/web3.js` requires exactly one entry point, `jayson/lib/client/browser`,
-which contains no stream parser at all. Documented beats dismissed.
+which contains no stream parser at all.
+
+The eighth isn't a JavaScript package, which is the part worth passing on:
+**Dependabot reads `Cargo.lock` too, and `npm audit` structurally cannot see it.**
+That one is `rand` 0.7.3, unsound only under a custom `log` logger that reseeds the
+thread-local generator mid-call. There's no custom logger here, it reaches the tree
+on a dev edge only — `litesvm` → `agave-syscalls` → `libsecp256k1` → `rand` — so
+`cargo tree -e normal` doesn't contain it at any version, and it can't be moved
+anyway, because `libsecp256k1` 0.6.0 asks for `rand = "^0.7"` and the fix is 0.8.6.
+Documented beats dismissed.
 
 ## It works with the GPU switched off, and at 382px
 
