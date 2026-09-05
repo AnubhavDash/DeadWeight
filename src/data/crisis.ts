@@ -14,8 +14,18 @@
  * days of the event, published figures ran 160 → 359 → 538 → 579 → over 1,250
  * with thousands missing, depending on the source and the hour. A number that
  * behaves like that must be fetched live with its timestamp and attribution, or
- * not shown at all. See lib/reliefweb.ts. Hardcoding it would be the exact
- * failure this project is about.
+ * not shown at all.
+ *
+ * It is not shown at all, and the reason is worth recording rather than glossing.
+ * The live route would be ReliefWeb, whose API is free and read-only — but since
+ * 1 November 2025 it requires a pre-approved `appname`, and an unapproved one is
+ * refused: `GET https://api.reliefweb.int/v2/reports?appname=deadweight.vercel.app`
+ * answers `403 AccessDeniedHttpException`, verified 5 September 2026. Approval is
+ * a request to ReliefWeb, not a signup, so this build cannot have it in time.
+ * Which leaves the two honest options, and hardcoding a moving toll — or worse,
+ * regexing one out of a report's prose and printing it in our own voice — would
+ * be the exact failure this project is about. So the toll is absent, and the page
+ * says so in the place a reader would look for it.
  */
 
 import type { CitationId } from "./citations";

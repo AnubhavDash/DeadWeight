@@ -15,8 +15,9 @@
  *               weakest form of evidence and surfaced as such in the UI.
  *
  * Nothing here is a moving number. Death tolls, appeal coverage and exchange
- * rates move, so they are fetched live (see lib/reliefweb.ts) or carry an
- * explicit `asOf` at the point of use — never baked into a rate table.
+ * rates move, so they are either not shown at all or carry an explicit `asOf` at
+ * the point of use — never baked into a rate table. See the note in `crisis.ts`
+ * on the toll, which is the clearest case of the first kind.
  */
 
 export type CitationId =

@@ -14,6 +14,7 @@ import type { Bias } from "@/data/rates";
 import { price, type Manifest, type Mode } from "@/lib/logistics";
 import { cn } from "@/lib/utils";
 
+import { InsteadPanel } from "./instead-panel";
 import { LedgerTable } from "./ledger-table";
 import { LetterPanel } from "./letter-panel";
 import { Notary } from "./solana/notary";
@@ -293,6 +294,17 @@ export function ManifestBuilder() {
 
       <div className="lg:sticky lg:top-8">
         <LedgerTable result={result} />
+        <InsteadPanel
+          manifest={manifest}
+          result={result}
+          bias={bias}
+          valueLocally={valueLocally}
+          // Adopting an alternative replaces the manifest rather than adding to
+          // it: the panel's whole claim is about this money spent instead, so
+          // leaving the old lines in place would price a different consignment
+          // than the one the reader just agreed to.
+          onAdopt={(itemId, quantity) => setQuantities({ [itemId]: quantity })}
+        />
         <LetterPanel manifest={manifest} bias={bias} valueLocally={valueLocally} />
         <Notary manifest={manifest} result={result} />
       </div>

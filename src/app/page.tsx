@@ -128,8 +128,10 @@ export default function Home() {
             <span className="text-crimson">The death and missing toll is not printed here.</span>{" "}
             Within days of the event, published figures ran 160 → 359 → 538 → 579 → over 1,250, with
             thousands missing, depending on the source and the hour. A number that behaves like that
-            gets fetched live with its timestamp and its attribution, or it does not get shown.
-            Hardcoding it would be the exact failure this project is about.
+            gets fetched live with its timestamp and its attribution, or it does not get shown. The
+            live route would be ReliefWeb, which since November 2025 requires a pre-approved app
+            name and refuses everything else — so this build cannot fetch it, and therefore does not
+            show it. Hardcoding it would be the exact failure this project is about.
           </p>
         </section>
 
