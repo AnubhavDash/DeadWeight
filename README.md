@@ -28,6 +28,8 @@ the whole argument of this project, and it is not ours — it is the response's.
 `#weekendchallenge` · **Prize technologies:** Solana, Google AI (Gemini),
 ElevenLabs
 
+![The Deadweight header: the headline "Price your generosity before you ship it." beside a crate drawn as a WebGL particle cloud](docs/hero.png)
+
 ---
 
 ## The rule the codebase is built to enforce
@@ -74,6 +76,12 @@ cannot be used — each with the rate it used, the range that rate came from, th
 publisher, the date, and the multiplication. Where a publisher blocked automated
 retrieval, the row says so instead of guessing.
 
+![The priced ledger for the default manifest: declared value $2,800.00, then subtractions for unusable used clothing, goods not needed or not appropriate, air freight, sorting labour and disposal, ending at a net delivered value of $556.55 and a BURDENS verdict](docs/ledger.png)
+
+*The box in the garage, sent by air: fifteen used winter jackets, twenty-five
+pairs of used shoes, sixty soft toys. $2,800.00 declared. $556.55 arrives. Every
+subtraction expands into its rate, its range, its publisher and its date.*
+
 **The verdict.** `LANDS`, `BURDENS`, or `BECOMES ASH`, from the ratio of what
 arrives to what you declared. Two items on the catalogue are prohibited outright —
 donated infant formula, and part-used or short-dated medicines out of a home
@@ -87,6 +95,11 @@ new conversion table is introduced — the comparison is the engine disagreeing
 with itself about two ways to spend one sum of money, which is a claim you can
 check line by line on both sides. When nothing beats what you have already put
 on the manifest, the panel says so and offers nothing.
+
+![The "same money, sent differently" panel: 1,866 water purification tablets, LANDS, $2,799.00 declared and $2,630.87 delivered — 94% — beside a note that this delivers $2,074.32 more than the manifest](docs/instead.png)
+
+*The same $2,800.00, spent on something the appeal asked for and priced by the
+same engine at the same freight mode and the same bias.*
 
 **The letter.** A short narration of your own ledger, written by Gemini under
 the constraint above, speakable by ElevenLabs, and sealed so the audio endpoint
@@ -139,6 +152,12 @@ UNICEF and CDC on infant formula, WRAP and NIST on textile reuse, and Nepal's
 2025 minimum wage. The ledger footnotes itself; nothing in the prose on the page
 is a number typed by hand.
 
+Every citation also records **how honestly we came by it** — `primary` (the
+document was fetched and read), `secondary` (a named third party reports the
+figure), or `snippet` (the host refused automated retrieval, so the quote comes
+from a search index and has not been read in context). The UI surfaces that
+grading, and `snippet` is treated as the weakest form of evidence there is.
+
 The rate table holds **14 cells**. Each one is a range, not a point, with a
 publisher, a date and a confidence. The default reading is the kindest one — every
 cost at the low end of its range, every usefulness at the high end, storage at
@@ -187,8 +206,6 @@ Relief or UNICEF.
 
 ## The notary — Solana devnet, as a demonstration
 
-`DeadwBH8o2uqPTpdA5LDHmz6i7dv8LGtFFtmytKyxZ5F`
-
 An Anchor program with two instructions and no third one. `initialize_registry`
 opens a single PDA that keeps running totals. `commit_pledge` records one
 decision: the manifest's hash, its declared total, its delivered net, and the
@@ -197,6 +214,34 @@ engine uses** and rejects the write if the two disagree. There is no `withdraw`
 instruction, no treasury, and no lamport path out of the program, because the
 app takes no donations and the chain should make that structural rather than
 promised.
+
+**It is live on devnet, and every account below is real:**
+
+| | Address |
+| --- | --- |
+| Program | [`DeadwBH8o2uqPTpdA5LDHmz6i7dv8LGtFFtmytKyxZ5F`](https://explorer.solana.com/address/DeadwBH8o2uqPTpdA5LDHmz6i7dv8LGtFFtmytKyxZ5F?cluster=devnet) |
+| ProgramData | [`DnBQn1c849hgekcH9CoWzCuoNYgfv6k1DtgEQnEDf5VF`](https://explorer.solana.com/address/DnBQn1c849hgekcH9CoWzCuoNYgfv6k1DtgEQnEDf5VF?cluster=devnet) |
+| IDL metadata | [`FzwrD5Y7tvKj26xNDyQm4ohh3ZWWw5YTQMM7WRVBsfWh`](https://explorer.solana.com/address/FzwrD5Y7tvKj26xNDyQm4ohh3ZWWw5YTQMM7WRVBsfWh?cluster=devnet) |
+| Registry PDA | [`ModqnUh86aLw2rBjuhAvm75RBL1pHEePopQHuWoCr7H`](https://explorer.solana.com/address/ModqnUh86aLw2rBjuhAvm75RBL1pHEePopQHuWoCr7H?cluster=devnet) |
+| Pledge #0 | [`CDqfAUTtUq7oQhjca84GUskpA6CuZyvy88FUbji7mBYN`](https://explorer.solana.com/address/CDqfAUTtUq7oQhjca84GUskpA6CuZyvy88FUbji7mBYN?cluster=devnet) |
+| Pledge #1 | [`Fs6TUfK6Mbviyo7xrsx7PFximYMdkVxqeUA4P6ZeSem6`](https://explorer.solana.com/address/Fs6TUfK6Mbviyo7xrsx7PFximYMdkVxqeUA4P6ZeSem6?cluster=devnet) |
+
+The IDL is uploaded to the chain as well as committed here, so an explorer can
+decode those accounts without being handed a schema.
+
+![The notary page reading the live devnet registry: 2 entries, $5,600.00 declared, $1,113.10 delivered net](docs/notary.png)
+
+*The panel does its own division on what it read off the chain: two entries,
+$5,600.00 declared across both, $1,113.10 of it delivered — 20%.*
+
+Both entries hold the same figures because they are two different manifests that
+happen to price identically; **#1 is the app's own default preset**, so its hash
+is the one you can reproduce by loading the page and pricing what is already on
+it. #0 is not, and it stays there — the program has no close instruction and no
+way to revise a record, which is the entire point and also means my own first
+entry is permanent. Neither figure was typed by hand: both came out of `price()`
+and `pledgeArgsFor()` directly, and the program accepted them only because its
+own re-derivation agreed.
 
 Devnet only, and labelled as a demonstration wherever it appears in the UI. What
 it is for is the one thing a public ledger is honestly good at here: a
@@ -230,8 +275,94 @@ no-WebGL path and the reduced-motion path render byte-identical screenshots — 
 checked on Android at **382px** wide, where the headline stays above the fold and
 the full-width canvas does not swallow a vertical drag.
 
+![The same crate twice, side by side: the WebGL particle cloud on the left, the still SVG fallback served under prefers-reduced-motion on the right](docs/gpu-off.png)
+
+*Left: WebGL. Right: the same page under `prefers-reduced-motion: reduce`. The
+headline, the figures and every control are identical.*
+
 The crate is decorative and marked `aria-hidden`. It carries no figure. Every
 number on the page survives its absence.
+
+---
+
+## Dependencies, and the seven advisories
+
+GitHub reported **seven** advisories against the default branch — 1 critical, 4
+high, 2 moderate. Six are gone. The seventh is still there on purpose, and this
+section says why, because "we ran `npm audit fix`" is not an answer and neither
+is a green badge.
+
+| Advisory | Package | Severity | Now |
+| --- | --- | --- | --- |
+| [GHSA-5xrq-8626-4rwp](https://github.com/advisories/GHSA-5xrq-8626-4rwp) | `vitest` | critical | fixed — 3.2.4 → **3.2.7** |
+| [GHSA-82x6-q7mm-w9cf](https://github.com/advisories/GHSA-82x6-q7mm-w9cf) | `toml` | high | fixed — overridden to **4.3.0** |
+| [GHSA-v5mp-jgw5-2x6j](https://github.com/advisories/GHSA-v5mp-jgw5-2x6j) | `toml` | high | fixed — same override |
+| [GHSA-w3rx-r6r6-pgpr](https://github.com/advisories/GHSA-w3rx-r6r6-pgpr) | `image-size` | high | **gone** — package no longer installed |
+| [GHSA-5p2g-fcmc-qvqq](https://github.com/advisories/GHSA-5p2g-fcmc-qvqq) | `image-size` | high | **gone** — same |
+| [GHSA-w5hq-g745-h8pq](https://github.com/advisories/GHSA-w5hq-g745-h8pq) | `uuid` | moderate | fixed — overridden to **11.1.1** |
+| [GHSA-528h-pc64-c93x](https://github.com/advisories/GHSA-528h-pc64-c93x) | `stream-json` | moderate | **stays** — unfixable and unreachable |
+
+**The critical one.** `vitest` 3.2.4 can be made to read and execute an arbitrary
+file *when its UI server is listening*. This project never runs `--ui`, so it was
+never exposed, but a patch bump inside 3.2.x costs nothing and removes the
+argument.
+
+**The two `toml` advisories** — uncontrolled recursion, and prototype pollution
+reaching `Object.prototype` — come in under `@anchor-lang/core`, which asks for
+`^3.0.0` and therefore gets 3.0.0, the vulnerable release. An `overrides` entry
+pins 4.3.0. Anchor calls exactly one thing from it, `parse` in `workspace.js`, and
+4.3.0 still exports it.
+
+**The `uuid` advisory** (a missing buffer bounds check in v3/v5/v6 when a `buf`
+is supplied) comes in under `jayson`, which pins `^8.3.2`. Overridden to 11.1.1;
+`jayson` uses `require('uuid').v4` and nothing else. `rpc-websockets` was left on
+its own `uuid` 14, which was never affected.
+
+**The two `image-size` advisories had no fix to install.** Both are infinite-loop
+denial of service in its ICNS, JXL and HEIF parsers, both are unpatched at the
+time of writing — vulnerable at `<=2.0.2`, and 2.0.2 is the latest release — so
+no version bump exists. It arrived as a dependency of **metro**, React Native's
+bundler, which arrived because `@solana/wallet-adapter-react` depends on
+`@solana-mobile/wallet-adapter-mobile`, which declares `react-native: >0.74` as a
+**non-optional peer**, and npm 7+ installs non-optional peers automatically.
+
+Nothing in this repository imports React Native. The mobile adapter only requires
+it from its `index.native.js` entry points, which metro selects and no web bundler
+ever resolves. So the fix was to stop installing a bundler for a platform this app
+does not target: `.npmrc` sets `legacy-peer-deps=true`, with that reasoning
+written out in the file. **69 packages left the tree** and both advisories left
+with them.
+
+The cost of that flag is real and worth stating: npm no longer validates peer
+ranges at all. Every peer this project actually needs — `react`, `react-dom`,
+`next` — is a direct dependency with an explicit version, and `npm run build` is
+the check that they agree. The flag also applies to `npx` invocations run from
+this directory, which is how `anchor idl init` came to fail on a missing
+`@solana/kit`; that one needs `npm_config_legacy_peer_deps=false` in front of it.
+
+**The one that stays.** `stream-json` 1.9.1, under `jayson`, under
+`@solana/web3.js`: its `pick`/`ignore`/`filter`/`replace` filters are O(depth²),
+so a small crafted JSON document can block the event loop. It cannot be bumped —
+the patched line is 3.5.0+, which is pure ESM with an `exports` map that does not
+answer `jayson`'s `require('stream-json/streamers/StreamValues')`, so the fix
+breaks the caller. And it cannot be reached from this app: those filters live in
+`jayson`'s TCP and TLS transports, and `@solana/web3.js` requires exactly one
+`jayson` entry point — `jayson/lib/client/browser` — which pulls in `uuid` and a
+request builder and no stream parser at all.
+
+So it is documented rather than dismissed. `npm audit` now ends on `2 moderate
+severity vulnerabilities`, which is that one advisory counted twice — once against
+`stream-json` and once against `jayson` for depending on it — and nothing else.
+The lockfile carries 979 packages. Everything above was re-verified afterwards:
+`tsc --noEmit`, `eslint src`, the 194 TypeScript tests, `next build`, and both
+pages loaded in headless Chrome with no console error and no uncaught exception.
+The wallet modal still mounts.
+
+It also says `fix available via npm audit fix`, which is misleading here: `jayson`
+depends on `stream-json: ^1.9.1`, so a plain `npm audit fix` cannot reach 3.x and
+changes nothing at all. Only `npm audit fix --force` crosses that major, and it
+crosses it into a caller that then cannot `require` its own parser. That is the
+one instruction in this section not to follow.
 
 ---
 
@@ -256,10 +387,20 @@ number.
 ## Provenance
 
 The whole repository was started and finished inside the challenge window —
-first commit `ff2b215`, **2026-09-05 13:31 UTC**. Nothing in it predates the
+first commit `aa8d467`, **2026-09-05 13:31 UTC**. Nothing in it predates the
 challenge.
 
 ## Post-submission changes
 
 *None.* Anything committed after the submission deadline will be listed here,
 with what changed and why.
+
+
+
+
+
+
+
+
+
+
