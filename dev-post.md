@@ -8,7 +8,7 @@ description: A deterministic ledger that prices a donated coat's whole journey i
 
 *Built for the [DEV Weekend Challenge: Generosity Edition](https://dev.to/challenges).*
 
-**Live:** https://deadweight.vercel.app
+**Live:** https://deadweight-jet.vercel.app
 **Repo:** https://github.com/AnubhavDash/deadweight
 
 ---
@@ -38,7 +38,7 @@ So I built the invoice.
 
 ## What it is
 
-[Deadweight](https://deadweight.vercel.app) is a ledger for the gap between
+[Deadweight](https://deadweight-jet.vercel.app) is a ledger for the gap between
 giving something and it arriving.
 
 You build a consignment on a manifest — winter jackets out of a wardrobe, bottled
@@ -421,7 +421,7 @@ the [Nepal Red Cross Society](https://nrcs.org/), [Direct
 Relief](https://www.directrelief.org/), or [UNICEF
 Nepal](https://www.unicef.org/nepal/).
 
-**Live:** https://deadweight.vercel.app
+**Live:** https://deadweight-jet.vercel.app
 **Repo:** https://github.com/AnubhavDash/deadweight
 
 *Built for the DEV Weekend Challenge: Generosity Edition. Categories: Solana,

@@ -24,7 +24,7 @@ appeal** the UN and partners launched for 84,000 people on 4 September 2026.
 Cash assistance is first on that appeal's own priority list. That ordering is
 the whole argument of this project, and it is not ours — it is the response's.
 
-**Live:** [deadweight.vercel.app](https://deadweight.vercel.app) · **Tag:**
+**Live:** [deadweight-jet.vercel.app](https://deadweight-jet.vercel.app) · **Tag:**
 `#weekendchallenge` · **Prize technologies:** Solana, Google AI (Gemini),
 ElevenLabs
 

@@ -28,7 +28,19 @@ const ledger = JetBrains_Mono({
   display: "swap",
 });
 
-const SITE = "https://deadweight.vercel.app";
+/**
+ * The canonical origin, read rather than typed. `metadataBase` is what every
+ * relative OG and Twitter image resolves against, so a stale value here does not
+ * throw — it silently serves social previews that point at a host that is not
+ * ours. This one has already moved once, from `deadweight` to `deadweight-jet`,
+ * which is the argument for not hardcoding it: Vercel sets
+ * `VERCEL_PROJECT_PRODUCTION_URL` to the project's production domain (host only,
+ * no scheme) on every deployment including previews, so a rename fixes itself.
+ * The literal is the local fallback and the current production host.
+ */
+const SITE = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : "https://deadweight-jet.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
