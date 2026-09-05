@@ -9,11 +9,18 @@
  *
  * Two things worth saying out loud. It is a public unauthenticated endpoint that
  * spends money at a paid API, so the body is validated strictly and each caller
- * is capped. And it works with no `GEMINI_API_KEY` at all — the engine's own
- * letter is not a stub, it is the same letter the model is asked to write, so
- * the feature ships whether or not a key exists.
+ * is capped — both in `@/lib/ask`, shared with the narration endpoint so the two
+ * cannot drift apart about what they accept. And it works with no
+ * `GEMINI_API_KEY` at all: the engine's own letter is not a stub, it is the same
+ * letter the model is asked to write, so the feature ships whether or not a key
+ * exists.
+ *
+ * Every reply carries a seal over the letter it contains, which is what lets
+ * `/api/narrate` read that letter aloud without becoming a speech proxy for
+ * arbitrary posted text. See `@/lib/seal`.
  */
 
+import { callerOf, json, limiter, parse } from "@/lib/ask";
 import {
   buildPrompt,
   deterministicLetter,
@@ -22,19 +29,17 @@ import {
   substitute,
   type Letter,
   type LetterFigures,
+  type LetterSource,
   type Prompt,
   type Refusal,
 } from "@/lib/letter";
-import {
-  DEFAULT_OPTIONS,
-  price,
-  unknownItems,
-  type Manifest,
-  type Mode,
-} from "@/lib/logistics";
-import type { Bias } from "@/data/rates";
+import { price } from "@/lib/logistics";
+import { seal } from "@/lib/seal";
 
 export const runtime = "nodejs";
+
+/** The chain below may spend most of half a minute before it gives up. */
+export const maxDuration = 45;
 
 const ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models";
 
@@ -56,137 +61,8 @@ const TOTAL_BUDGET_MS = 26_000;
 
 /* --- limits ------------------------------------------------------------- */
 
-const MAX_LINES = 40;
-const MAX_QUANTITY = 100_000;
-const MAX_UNIT_USD = 1_000_000;
-
-const MODES: readonly Mode[] = ["air", "road", "sea"];
-const BIASES: readonly Bias[] = ["generous", "midpoint", "harsh"];
-
-/* --- the rate limit ----------------------------------------------------- */
-
-/**
- * Per instance, in memory, and deliberately so: a serverless deployment may run
- * several of these, which makes the real ceiling a multiple of this one. It is a
- * brake on a script pointed at the endpoint, not a quota system. Anything
- * stricter wants a shared store, and that is not a dependency this project is
- * taking on for a demonstration.
- */
-const WINDOW_MS = 10 * 60_000;
-const PER_WINDOW = 12;
-const MAX_TRACKED = 5000;
-
-const callers = new Map<string, { count: number; resetAt: number }>();
-
-function allow(caller: string, now: number): { ok: true } | { ok: false; retryAfter: number } {
-  if (callers.size > MAX_TRACKED) {
-    for (const [key, seen] of callers) if (seen.resetAt <= now) callers.delete(key);
-  }
-
-  const seen = callers.get(caller);
-  if (!seen || seen.resetAt <= now) {
-    callers.set(caller, { count: 1, resetAt: now + WINDOW_MS });
-    return { ok: true };
-  }
-  if (seen.count >= PER_WINDOW) {
-    return { ok: false, retryAfter: Math.ceil((seen.resetAt - now) / 1000) };
-  }
-  seen.count += 1;
-  return { ok: true };
-}
-
-/** The first hop of `x-forwarded-for`, which is the one the platform sets. */
-function callerOf(request: Request): string {
-  const forwarded = request.headers.get("x-forwarded-for");
-  const first = forwarded?.split(",")[0]?.trim();
-  return first && first.length > 0 ? first : (request.headers.get("x-real-ip") ?? "unknown");
-}
-
-/* --- what a caller may send --------------------------------------------- */
-
-interface Ask {
-  readonly manifest: Manifest;
-  readonly bias: Bias;
-  readonly valueLocally: boolean;
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
-
-function oneOf<T extends string>(allowed: readonly T[], value: unknown): value is T {
-  return typeof value === "string" && (allowed as readonly string[]).includes(value);
-}
-
-/**
- * Strict on purpose. The manifest is the only thing the client is trusted with,
- * and everything numeric on the response is derived from it here, so a body that
- * is not exactly what it claims to be is refused rather than coerced.
- */
-function parse(body: unknown): { readonly ask: Ask } | { readonly error: string } {
-  if (!isRecord(body)) return { error: "Expected a JSON object." };
-
-  const { lines, mode, bias, valueLocally } = body;
-  if (!Array.isArray(lines)) return { error: "`lines` must be an array." };
-  if (lines.length > MAX_LINES) {
-    return { error: `A manifest may hold at most ${MAX_LINES} lines.` };
-  }
-  if (!oneOf(MODES, mode)) return { error: "`mode` must be air, road or sea." };
-  if (bias !== undefined && !oneOf(BIASES, bias)) {
-    return { error: "`bias` must be generous, midpoint or harsh." };
-  }
-  if (valueLocally !== undefined && typeof valueLocally !== "boolean") {
-    return { error: "`valueLocally` must be true or false." };
-  }
-
-  const parsed: Manifest["lines"][number][] = [];
-  for (const line of lines) {
-    if (!isRecord(line)) return { error: "Every line must be an object." };
-    const { itemId, quantity, declaredUnitUsd } = line;
-    if (typeof itemId !== "string" || itemId.length === 0 || itemId.length > 64) {
-      return { error: "Every line needs an `itemId`." };
-    }
-    if (
-      typeof quantity !== "number" ||
-      !Number.isInteger(quantity) ||
-      quantity < 0 ||
-      quantity > MAX_QUANTITY
-    ) {
-      return { error: `\`quantity\` must be a whole number from zero to ${MAX_QUANTITY}.` };
-    }
-    if (
-      declaredUnitUsd !== undefined &&
-      (typeof declaredUnitUsd !== "number" ||
-        !Number.isFinite(declaredUnitUsd) ||
-        declaredUnitUsd < 0 ||
-        declaredUnitUsd > MAX_UNIT_USD)
-    ) {
-      return { error: "`declaredUnitUsd` must be an amount in dollars." };
-    }
-    parsed.push(
-      declaredUnitUsd === undefined
-        ? { itemId, quantity }
-        : { itemId, quantity, declaredUnitUsd },
-    );
-  }
-
-  const manifest: Manifest = { lines: parsed, mode };
-  const unknown = unknownItems(manifest);
-  if (unknown.length > 0) {
-    return { error: `This build does not know these items: ${unknown.join(", ")}.` };
-  }
-  if (!parsed.some((line) => line.quantity > 0)) {
-    return { error: "The manifest is empty. There is nothing to write about." };
-  }
-
-  return {
-    ask: {
-      manifest,
-      bias: bias ?? DEFAULT_OPTIONS.bias,
-      valueLocally: valueLocally === true,
-    },
-  };
-}
+/** A dozen letters per caller per ten minutes. `limiter` says what that means. */
+const allow = limiter({ perWindow: 12, windowMs: 10 * 60_000 });
 
 /* --- one call to one model ---------------------------------------------- */
 
@@ -316,11 +192,17 @@ async function fromGemini(prompt: Prompt, figures: LetterFigures, key: string): 
 
 /* --- the handler -------------------------------------------------------- */
 
-function json(body: unknown, status = 200, headers: Record<string, string> = {}): Response {
-  return Response.json(body, {
-    status,
-    headers: { "cache-control": "no-store", ...headers },
-  });
+/**
+ * What goes on the wire. `Letter` plus the seal, which is not part of the letter
+ * itself — it is what `/api/narrate` needs in order to read these exact words
+ * aloud rather than the ones a caller made up.
+ */
+type Reply = Letter & { readonly seal: string };
+
+function reply(letter: string, source: LetterSource, refused?: Refusal): Response {
+  // `refused: undefined` is dropped by `JSON.stringify`, so a letter nobody
+  // refused carries no such field rather than a null one.
+  return json({ letter, source, refused, seal: seal(letter) } satisfies Reply);
 }
 
 export async function POST(request: Request): Promise<Response> {
@@ -349,14 +231,10 @@ export async function POST(request: Request): Promise<Response> {
   const engine = () => substitute(deterministicLetter(result, figures), figures);
 
   const key = process.env.GEMINI_API_KEY?.trim();
-  if (key === undefined || key.length === 0) {
-    return json({ letter: engine(), source: "engine", refused: "unavailable" } satisfies Letter);
-  }
+  if (key === undefined || key.length === 0) return reply(engine(), "engine", "unavailable");
 
   const written = await fromGemini(buildPrompt(result, figures), figures, key);
-  return json(
-    "letter" in written
-      ? ({ letter: written.letter, source: written.source } satisfies Letter)
-      : ({ letter: engine(), source: "engine", refused: written.refused } satisfies Letter),
-  );
+  return "letter" in written
+    ? reply(written.letter, written.source)
+    : reply(engine(), "engine", written.refused);
 }

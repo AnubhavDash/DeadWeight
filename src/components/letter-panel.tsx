@@ -10,9 +10,16 @@
  * figure anyway the route throws it away and answers with the letter this build
  * writes itself — so this component's job is to show the prose and be honest
  * about which of the two wrote it.
+ *
+ * It also reads the letter out. The audio comes from `/api/narrate`, which
+ * synthesises the letter it was sent only if that letter carries the seal this
+ * build issued with it; anything else and it narrates its own. When there is no
+ * voice to be had — no key, or an endpoint that will not answer — the browser's
+ * own speech synthesis reads the same words instead, and the panel says which
+ * voice you are listening to.
  */
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type { Bias } from "@/data/rates";
 import type { Refusal } from "@/lib/letter";
@@ -23,6 +30,8 @@ interface Reply {
   readonly letter: string;
   readonly source: string;
   readonly refused?: Refusal;
+  /** Proof to `/api/narrate` that these words came from here. */
+  readonly seal?: string;
 }
 
 /** Why the model's draft is not the one on screen. Told, never hidden. */
@@ -62,6 +71,10 @@ interface Outcome {
   readonly error?: string;
 }
 
+/** Whether anything is being read out, and by what. Both are told, never hidden. */
+type Playback = "idle" | "fetching" | "playing";
+type Voice = "elevenlabs" | "browser";
+
 export function LetterPanel({
   manifest,
   bias,
@@ -73,6 +86,12 @@ export function LetterPanel({
 }) {
   const [pending, setPending] = useState(false);
   const [outcome, setOutcome] = useState<Outcome | null>(null);
+  const [playback, setPlayback] = useState<Playback>("idle");
+  const [voice, setVoice] = useState<Voice | null>(null);
+  const [voiceError, setVoiceError] = useState<string | null>(null);
+
+  const audio = useRef<HTMLAudioElement | null>(null);
+  const objectUrl = useRef<string | null>(null);
 
   const identity = useMemo(
     () => identityOf(manifest, bias, valueLocally),
@@ -81,7 +100,101 @@ export function LetterPanel({
   const shown = outcome?.identity === identity ? outcome : null;
   const empty = !manifest.lines.some((line) => line.quantity > 0);
 
+  /** Silence, whichever voice was talking, and release the blob behind it. */
+  const stop = useCallback(() => {
+    audio.current?.pause();
+    audio.current = null;
+    if (objectUrl.current !== null) {
+      URL.revokeObjectURL(objectUrl.current);
+      objectUrl.current = null;
+    }
+    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+    setPlayback("idle");
+  }, []);
+
+  // A letter belongs to one manifest. Editing the manifest stops the reading of
+  // the old one rather than leaving a voice describing a consignment nobody is
+  // looking at, and leaving the page stops it too.
+  useEffect(() => stop, [identity, stop]);
+
+  /** The fallback voice. Same words, no key, no network. */
+  const readHere = useCallback((text: string) => {
+    if (!("speechSynthesis" in window)) {
+      setVoiceError("Nothing here can read it aloud. The letter itself is above.");
+      setPlayback("idle");
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.95;
+    utterance.onend = () => setPlayback("idle");
+    utterance.onerror = () => setPlayback("idle");
+    window.speechSynthesis.speak(utterance);
+    setVoice("browser");
+    setPlayback("playing");
+  }, []);
+
+  /**
+   * Ask for the audio, and fall back to the browser on anything that is not it.
+   * The letter and its seal go up with the manifest: the route reads these exact
+   * words only because the seal says they are its own.
+   */
+  const listen = useCallback(async () => {
+    const reply = shown?.reply;
+    if (reply === undefined) return;
+    if (playback !== "idle") {
+      stop();
+      return;
+    }
+
+    setVoiceError(null);
+    setPlayback("fetching");
+
+    let sound: Blob | null = null;
+    try {
+      const response = await fetch("/api/narrate", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          lines: manifest.lines,
+          mode: manifest.mode,
+          bias,
+          valueLocally,
+          letter: reply.letter,
+          seal: reply.seal,
+        }),
+      });
+      if (response.ok && (response.headers.get("content-type") ?? "").startsWith("audio/")) {
+        sound = await response.blob();
+      }
+    } catch {
+      // Offline, or the route never answered. The browser can still read it.
+    }
+
+    if (sound !== null) {
+      const url = URL.createObjectURL(sound);
+      const element = new Audio(url);
+      objectUrl.current = url;
+      audio.current = element;
+      element.onended = stop;
+      element.onerror = stop;
+      try {
+        await element.play();
+        setVoice("elevenlabs");
+        setPlayback("playing");
+        return;
+      } catch {
+        stop();
+      }
+    }
+
+    readHere(reply.letter);
+  }, [shown, playback, stop, readHere, manifest, bias, valueLocally]);
+
   const ask = useCallback(async () => {
+    stop();
+    setVoice(null);
+    setVoiceError(null);
     setPending(true);
     setOutcome(null);
     try {
@@ -113,7 +226,15 @@ export function LetterPanel({
         typeof body.letter === "string" && body.letter.length > 0
           ? {
               identity,
-              reply: { letter: body.letter, source: body.source ?? "engine", refused: body.refused },
+              // The seal travels with the letter. Without it `/api/narrate` reads
+              // its own prose instead of the words on screen — correct, but not
+              // the same paragraphs the reader is looking at.
+              reply: {
+                letter: body.letter,
+                source: body.source ?? "engine",
+                refused: body.refused,
+                seal: body.seal,
+              },
             }
           : { identity, error: "The warehouse answered with nothing at all." },
       );
@@ -122,7 +243,7 @@ export function LetterPanel({
     } finally {
       setPending(false);
     }
-  }, [manifest, bias, valueLocally, identity]);
+  }, [manifest, bias, valueLocally, identity, stop]);
 
   return (
     <section aria-label="The reply from the warehouse" className="hairline mt-8 pt-6">
@@ -173,7 +294,32 @@ export function LetterPanel({
             <p className="whitespace-pre-line text-[13px] leading-[1.75] text-paper/90">
               {shown.reply.letter}
             </p>
-            <p className="mt-4 border-t border-rule pt-3 text-[11px] leading-relaxed text-meltwater">
+
+            <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-rule pt-3">
+              <button
+                type="button"
+                onClick={() => void listen()}
+                aria-label={playback === "playing" ? "Stop reading the letter" : "Read the letter aloud"}
+                className="border border-rule px-3 py-1.5 text-[10px] uppercase tracking-[0.16em] text-meltwater transition-colors hover:border-sonar hover:text-sonar"
+              >
+                {playback === "fetching"
+                  ? "finding a voice…"
+                  : playback === "playing"
+                    ? "stop reading"
+                    : "read it aloud"}
+              </button>
+              {playback === "playing" && voice !== null ? (
+                <span className="text-[10px] uppercase tracking-[0.16em] text-meltwater">
+                  {voice === "elevenlabs" ? "read by elevenlabs" : "read by your browser"}
+                </span>
+              ) : null}
+            </div>
+
+            {voiceError !== null ? (
+              <p className="mt-2 text-[11px] leading-relaxed text-crimson">{voiceError}</p>
+            ) : null}
+
+            <p className="mt-3 text-[11px] leading-relaxed text-meltwater">
               {shown.reply.refused ? (
                 REFUSAL[shown.reply.refused]
               ) : (
