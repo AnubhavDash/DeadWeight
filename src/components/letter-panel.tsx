@@ -254,7 +254,7 @@ export function LetterPanel({
         </span>
       </div>
 
-      <p className="mt-3 text-xs leading-relaxed text-meltwater">
+      <p className="mt-3 text-sm leading-relaxed text-meltwater">
         The receiving end of this consignment, writing back. A language model writes the prose and is
         never shown a single figure — not the declared value, not the weight, not even the item
         labels, several of which carry a size. It marks where a number belongs and{" "}
@@ -277,14 +277,14 @@ export function LetterPanel({
       </button>
 
       {empty ? (
-        <p className="mt-2 text-xs leading-relaxed text-meltwater">
+        <p className="mt-2 text-sm leading-relaxed text-meltwater">
           Put something on the manifest first. There is nothing to write about yet.
         </p>
       ) : null}
 
       <div aria-live="polite">
         {shown?.error ? (
-          <p className="mt-3 border border-crimson/40 bg-crimson/5 px-3 py-2 text-xs leading-relaxed text-paper/90">
+          <p className="mt-3 border border-crimson/40 bg-crimson/5 px-3 py-2 text-sm leading-relaxed text-paper/90">
             {shown.error}
           </p>
         ) : null}
@@ -316,10 +316,10 @@ export function LetterPanel({
             </div>
 
             {voiceError !== null ? (
-              <p className="mt-2 text-xs leading-relaxed text-crimson">{voiceError}</p>
+              <p className="mt-2 text-sm leading-relaxed text-crimson">{voiceError}</p>
             ) : null}
 
-            <p className="mt-3 text-xs leading-relaxed text-meltwater">
+            <p className="mt-3 text-sm leading-relaxed text-meltwater">
               {shown.reply.refused ? (
                 REFUSAL[shown.reply.refused]
               ) : (

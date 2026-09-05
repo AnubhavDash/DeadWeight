@@ -153,7 +153,7 @@ function ItemRow({
             <span className="group-open:hidden">why this matters</span>
             <span className="hidden group-open:inline">hide</span>
           </summary>
-          <p className="mt-1.5 border-l border-rule pl-3 text-xs leading-relaxed text-meltwater">
+          <p className="mt-1.5 border-l border-rule pl-3 text-sm leading-relaxed text-meltwater">
             {item.note}
           </p>
         </details>
@@ -220,7 +220,7 @@ export function ManifestBuilder() {
                   <span className={cn("block text-sm", active ? "text-sonar" : "text-paper/90")}>
                     {preset.label}
                   </span>
-                  <span className="mt-0.5 block text-xs leading-relaxed text-meltwater">
+                  <span className="mt-0.5 block text-sm leading-relaxed text-meltwater">
                     {preset.note}
                   </span>
                 </button>
@@ -266,7 +266,7 @@ export function ManifestBuilder() {
           <fieldset>
             <legend className={LEGEND}>How it travels</legend>
             <Segmented name="Freight mode" value={mode} onChange={setMode} options={MODE_OPTIONS} />
-            <p className="mt-2 text-xs leading-relaxed text-meltwater">
+            <p className="mt-2 text-sm leading-relaxed text-meltwater">
               {MODES.find((entry) => entry.mode === mode)?.note}
             </p>
           </fieldset>
@@ -274,13 +274,13 @@ export function ManifestBuilder() {
           <fieldset>
             <legend className={LEGEND}>Which reading of the sources</legend>
             <Segmented name="Reading" value={bias} onChange={setBias} options={READING_OPTIONS} />
-            <p className="mt-2 text-xs leading-relaxed text-meltwater">
+            <p className="mt-2 text-sm leading-relaxed text-meltwater">
               {READINGS.find((entry) => entry.bias === bias)?.note}
             </p>
           </fieldset>
         </div>
 
-        <label className="mt-6 flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-meltwater">
+        <label className="mt-6 flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-meltwater">
           <input
             type="checkbox"
             checked={valueLocally}

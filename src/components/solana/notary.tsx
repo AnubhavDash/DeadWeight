@@ -18,7 +18,7 @@ const Placeholder = () => (
     <p className="display text-xs uppercase tracking-[0.2em] text-meltwater">
       Notarise the verdict
     </p>
-    <p className="mt-3 text-xs leading-relaxed text-meltwater">Loading the devnet notary…</p>
+    <p className="mt-3 text-sm leading-relaxed text-meltwater">Loading the devnet notary…</p>
   </section>
 );
 

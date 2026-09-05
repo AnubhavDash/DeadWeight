@@ -194,7 +194,7 @@ export function NotarisePanel({
         </span>
       </div>
 
-      <p className="mt-3 text-xs leading-relaxed text-meltwater">
+      <p className="mt-3 text-sm leading-relaxed text-meltwater">
         This writes the figures above to a Solana devnet account and{" "}
         <span className="text-paper/85">moves no money</span>. It is not a donation channel and it
         never becomes one — the appeals in the footer take real money directly. What it demonstrates
@@ -224,7 +224,7 @@ export function NotarisePanel({
       </dl>
 
       {truncated ? (
-        <p className="mt-2 text-xs leading-relaxed text-meltwater">
+        <p className="mt-2 text-sm leading-relaxed text-meltwater">
           The account holds {MAX_CHAIN_LINES} lines, so it stores the {MAX_CHAIN_LINES} largest by
           declared value. Every figure above is computed over all {lineCount}, and the hash covers
           all {lineCount} — the stored list is a sample, the arithmetic is not.
@@ -259,7 +259,7 @@ export function NotarisePanel({
         )}
 
         {empty ? (
-          <p className="text-xs leading-relaxed text-meltwater">
+          <p className="text-sm leading-relaxed text-meltwater">
             Put something on the manifest first. The program refuses an empty one.
           </p>
         ) : null}
@@ -275,7 +275,7 @@ export function NotarisePanel({
       </div>
 
       {shown?.error ? (
-        <p className="mt-3 border border-crimson/40 bg-crimson/5 px-3 py-2 text-xs leading-relaxed text-paper/90">
+        <p className="mt-3 border border-crimson/40 bg-crimson/5 px-3 py-2 text-sm leading-relaxed text-paper/90">
           {shown.error}
         </p>
       ) : null}
@@ -303,7 +303,7 @@ export function NotarisePanel({
               account {short(shown.receipt.pledge)}
             </a>
           </p>
-          <p className="mt-2 text-xs leading-relaxed text-meltwater">
+          <p className="mt-2 text-sm leading-relaxed text-meltwater">
             It is on the public ledger now, alongside everyone else&rsquo;s —{" "}
             <Link
               href="/notary"

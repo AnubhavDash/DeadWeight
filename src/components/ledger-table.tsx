@@ -27,7 +27,7 @@ function CellNote({ cell, assumption }: { cell?: Cell; assumption?: boolean }) {
           <span className="border border-crimson/40 px-1 py-px text-crimson">assumption</span>
         ) : null}
       </summary>
-      <div className="mt-2 space-y-1.5 border-l border-rule pl-3 text-xs leading-relaxed text-meltwater">
+      <div className="mt-2 space-y-1.5 border-l border-rule pl-3 text-sm leading-relaxed text-meltwater">
         <p>
           <a
             href={source.url}
@@ -83,7 +83,7 @@ function Row({ line }: { line: LedgerLine }) {
         </span>
       </div>
       {line.detail ? (
-        <p className="ledger mt-1 text-xs leading-relaxed text-meltwater">{line.detail}</p>
+        <p className="ledger mt-1 text-sm leading-relaxed text-meltwater">{line.detail}</p>
       ) : null}
       <CellNote cell={line.cell} assumption={line.assumption} />
     </li>
@@ -154,7 +154,7 @@ export function LedgerTable({ result }: { result: PricedManifest }) {
             </span>
           </div>
 
-          <p className="text-xs leading-relaxed text-meltwater">
+          <p className="text-sm leading-relaxed text-meltwater">
             Priced three times from the same table. Kindest reading{" "}
             <span className="ledger text-paper/80">{formatUsd(result.band.high)}</span>, harshest{" "}
             <span className="ledger text-paper/80">{formatUsd(result.band.low)}</span>.{" "}
@@ -189,7 +189,7 @@ export function LedgerTable({ result }: { result: PricedManifest }) {
           </div>
 
           {result.usesAssumptions ? (
-            <p className="text-xs leading-relaxed text-meltwater">
+            <p className="text-sm leading-relaxed text-meltwater">
               Lines tagged <span className="text-crimson">assumption</span> are reasoned from
               guidance rather than quoted from a source. They are marked everywhere they appear, and
               the sources page lists every one of them.

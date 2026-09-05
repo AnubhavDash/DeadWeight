@@ -120,17 +120,27 @@ export default function Home() {
               <p className="text-2xs uppercase tracking-[0.16em] text-meltwater">
                 What the appeal asked for, in the order it asked
               </p>
+              {/*
+                The order is the argument, so the numbers are set in the ledger
+                face a step down from the words. `items-baseline` is what keeps
+                them sitting on the same line as those words: at two different
+                sizes in a flex row, stretch alignment would top-align both
+                boxes and leave the smaller number riding high. Nothing here is
+                coloured to single out cash — sonar means "you can click this"
+                everywhere else on the site, and 01 is not a link. The position
+                and the sentence underneath already say it.
+              */}
               <ol className="mt-3 grid gap-y-1.5 sm:grid-cols-2">
                 {CRISIS.appeal.priorities.map((priority, index) => (
-                  <li key={priority} className="flex gap-2.5 text-sm">
+                  <li key={priority} className="flex items-baseline gap-2.5 text-sm">
                     <span className="ledger text-xs text-meltwater">
                       {String(index + 1).padStart(2, "0")}
                     </span>
-                    <span className={index === 0 ? "text-sonar" : "text-paper/85"}>{priority}</span>
+                    <span className="text-paper/85">{priority}</span>
                   </li>
                 ))}
               </ol>
-              <p className="mt-3 text-xs leading-relaxed text-meltwater">
+              <p className="mt-3 text-sm leading-relaxed text-meltwater">
                 Cash is first. That ordering is the most important fact on this page: the
                 response&rsquo;s own priority list opens with the thing donors are least inclined to
                 send.
@@ -138,7 +148,7 @@ export default function Home() {
             </div>
           </div>
 
-          <p className="mt-6 max-w-3xl text-xs leading-relaxed text-meltwater">
+          <p className="mt-6 max-w-3xl text-sm leading-relaxed text-meltwater">
             <span className="text-crimson">The death and missing toll is not printed here.</span>{" "}
             Within days of the event, published figures ran 160 → 359 → 538 → 579 → over 1,250, with
             thousands missing, depending on the source and the hour. A number that behaves like that
@@ -182,7 +192,7 @@ export default function Home() {
                   className="block h-full border border-rule p-4 transition-colors hover:border-sonar/60 hover:bg-sonar/5"
                 >
                   <span className="block text-sm text-paper">{appeal.name}</span>
-                  <span className="mt-1 block text-xs leading-relaxed text-meltwater">
+                  <span className="mt-1 block text-sm leading-relaxed text-meltwater">
                     {appeal.note}
                   </span>
                 </a>

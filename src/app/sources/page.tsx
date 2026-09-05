@@ -57,10 +57,10 @@ function RateRow({ name }: { name: RateCellName }) {
         ) : null}
       </p>
       {cell.derivation ? (
-        <p className="ledger mt-2 text-xs leading-relaxed text-paper/70">{cell.derivation}</p>
+        <p className="ledger mt-2 text-sm leading-relaxed text-paper/70">{cell.derivation}</p>
       ) : null}
       {cell.note ? (
-        <p className="mt-2 max-w-3xl text-xs leading-relaxed text-meltwater">{cell.note}</p>
+        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-meltwater">{cell.note}</p>
       ) : null}
       <p className="mt-2 text-xs text-meltwater">
         <a
@@ -77,7 +77,7 @@ function RateRow({ name }: { name: RateCellName }) {
         ) : null}
       </p>
       {source.quote ? (
-        <p className="mt-1.5 max-w-3xl border-l border-rule pl-3 text-xs leading-relaxed text-paper/70">
+        <p className="mt-1.5 max-w-3xl border-l border-rule pl-3 text-sm leading-relaxed text-paper/70">
           “{source.quote}”
         </p>
       ) : null}
@@ -120,7 +120,7 @@ export default function SourcesPage() {
           <h2 id="rates" className="display text-2xl uppercase tracking-[0.14em] text-paper">
             The rate table
           </h2>
-          <p className="mt-2 text-xs text-meltwater">
+          <p className="mt-2 text-sm text-meltwater">
             {CELL_NAMES.length} cells. Named as the engine names them, so you can grep for one and
             find the code that uses it.
           </p>
@@ -148,7 +148,7 @@ export default function SourcesPage() {
               </li>
             ))}
           </ul>
-          <p className="mt-4 max-w-2xl text-xs leading-relaxed text-meltwater">
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-meltwater">
             In-region replacement prices for every catalogue item are assumptions too — the UNICEF
             Supply Catalogue publishes no relief-item unit prices we could read. That is why valuing
             the usable share at local prices is off by default on the front page: the headline
@@ -243,7 +243,7 @@ export default function SourcesPage() {
                     </span>
                   </p>
                   {source.quote ? (
-                    <p className="mt-1 max-w-3xl text-xs leading-relaxed text-paper/70">
+                    <p className="mt-1 max-w-3xl text-sm leading-relaxed text-paper/70">
                       “{source.quote}”
                     </p>
                   ) : null}
@@ -253,7 +253,7 @@ export default function SourcesPage() {
           </ul>
         </section>
 
-        <p className={`${SECTION} mt-16 max-w-3xl text-xs leading-relaxed text-meltwater`}>
+        <p className={`${SECTION} mt-16 max-w-3xl text-sm leading-relaxed text-meltwater`}>
           Found an error? That is the point of printing this. The figures move, the guidance is
           revised, and a rate table published in September 2026 will be wrong by next year — the
           dates are on every cell so you can see how stale a number is before you trust it.

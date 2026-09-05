@@ -65,14 +65,14 @@ export function InsteadPanel({
       </div>
 
       {found.length === 0 ? (
-        <p className="mt-3 text-xs leading-relaxed text-meltwater">
+        <p className="mt-3 text-sm leading-relaxed text-meltwater">
           Nothing on the appeal&rsquo;s list delivers more than what you have already put on the
           manifest. That is the answer a consignment wants: there is no better version of this to
           suggest, so this build does not invent one.
         </p>
       ) : (
         <>
-          <p className="mt-3 text-xs leading-relaxed text-meltwater">
+          <p className="mt-3 text-sm leading-relaxed text-meltwater">
             Your{" "}
             <span className="ledger text-paper/85">{formatUsd(result.declared)}</span> spent instead
             on something the flash appeal named, in whole units, flown the same way and priced by the
@@ -100,12 +100,12 @@ export function InsteadPanel({
                   </p>
                 </div>
 
-                <p className="ledger mt-1.5 text-xs leading-relaxed text-meltwater">
+                <p className="ledger mt-1.5 text-sm leading-relaxed text-meltwater">
                   {formatUsd(option.result.declared)} declared ·{" "}
                   <span className="text-paper/85">{formatUsd(option.result.net)}</span> delivered ·{" "}
                   {formatPercent(option.result.efficiency)} of it
                 </p>
-                <p className="mt-1 text-xs leading-relaxed text-paper/85">
+                <p className="mt-1 text-sm leading-relaxed text-paper/85">
                   <span className="ledger text-sonar">+{formatUsd(option.gain)}</span> more reaches
                   the response than the manifest above, for the money already being spent.
                 </p>
@@ -121,7 +121,7 @@ export function InsteadPanel({
             ))}
           </ul>
 
-          <p className="mt-3 text-xs leading-relaxed text-meltwater">
+          <p className="mt-3 text-sm leading-relaxed text-meltwater">
             Cash is first on the appeal&rsquo;s own priority list, and none of these beat it — the
             links at the foot of this page are where it goes. What is above is the best of the things
             that come in a box.

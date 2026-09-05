@@ -317,14 +317,14 @@ function Entries({ totals, entries }: { totals: Totals; entries: readonly Entry[
       </dl>
 
       {totals.declared > 0 ? (
-        <p className="mt-2 text-xs leading-relaxed text-meltwater">
+        <p className="mt-2 text-sm leading-relaxed text-meltwater">
           {formatUsd(totals.declared)} declared across everything the notary holds,{" "}
           {formatUsd(totals.net)} of it delivered — {formatPercent(totals.net / totals.declared)} of
           what was given. The program keeps those two totals itself; this page only divides them.
         </p>
       ) : null}
 
-      <p className="mt-4 text-xs leading-relaxed text-meltwater">
+      <p className="mt-4 text-sm leading-relaxed text-meltwater">
         Each account stores at most {MAX_CHAIN_LINES} lines, the largest by declared value, while
         every figure beside them was computed over the whole manifest and the hash covers all of it.
         A long consignment shows a sample of its contents; none of its arithmetic is missing.
@@ -337,7 +337,7 @@ function Entries({ totals, entries }: { totals: Totals; entries: readonly Entry[
       </ul>
 
       {entries.length !== totals.count ? (
-        <p className="mt-3 text-xs leading-relaxed text-meltwater">
+        <p className="mt-3 text-sm leading-relaxed text-meltwater">
           The registry counts {totals.count} entries and this endpoint returned {entries.length}.
           Asking a public RPC for every account of a program is the first thing it throttles — the
           missing entries are still on the chain.
