@@ -149,7 +149,7 @@ export default function Home() {
           </div>
 
           <p className="mt-6 max-w-3xl text-sm leading-relaxed text-meltwater">
-            <span className="text-crimson">The death and missing toll is not printed here.</span>{" "}
+            <span className="text-paper">The death and missing toll is not printed here.</span>{" "}
             Within days of the event, published figures ran 160 → 359 → 538 → 579 → over 1,250, with
             thousands missing, depending on the source and the hour. A number that behaves like that
             gets fetched live with its timestamp and its attribution, or it does not get shown. The

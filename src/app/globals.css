@@ -47,8 +47,16 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
 
-  /* Deadweight palette. Crimson is reserved: it appears only on negative
-     numbers and the BECOMES ASH verdict. Never decorative. */
+  /* Deadweight palette. Crimson is load-bearing rather than decorative: it marks
+     value that left the manifest (a negative amount, the BECOMES ASH verdict,
+     the response budget a consignment consumes), a thing that must not be sent,
+     a figure reasoned from guidance or quoted from a snippet instead of read in
+     context, a request that failed, and — via `--destructive` below — a control
+     that throws work away or a ledger that moves no money. It may appear in
+     running prose only where the prose names a crimson marker on the same page.
+     A red sentence with nothing to point at competes with the numbers, and the
+     numbers have to win. Sonar keeps the same discipline in the other direction
+     and means one thing everywhere: you can interact with this. */
   --color-silt: var(--silt);
   --color-rule: var(--rule);
   --color-meltwater: var(--meltwater);
