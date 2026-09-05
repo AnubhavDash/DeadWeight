@@ -253,7 +253,10 @@ export function ManifestBuilder() {
           <button
             type="button"
             onClick={() => setQuantities({})}
-            className="mt-3 text-[10px] uppercase tracking-[0.16em] text-meltwater hover:text-crimson"
+            // Padded to a thumb-sized target: the label is 10px small caps, which
+            // renders 15px tall on a phone and is the only control here a finger
+            // could miss.
+            className="mt-2 py-1.5 text-[10px] uppercase tracking-[0.16em] text-meltwater hover:text-crimson"
           >
             clear the manifest
           </button>

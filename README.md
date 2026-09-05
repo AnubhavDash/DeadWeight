@@ -63,8 +63,10 @@ placeholder.
 **The manifest.** Pick items from a catalogue of the things people really send —
 used winter jackets out of a wardrobe, bottled water by the litre, used shoes,
 soft toys, assorted medicines from a home cabinet — alongside the things the
-appeal actually named, and set quantities. Choose air or sea. Choose whether to
-read every sourced range at the end that favours you, or the end that doesn't.
+appeal actually named, and set quantities. Choose the route: air (days, and the
+only way into the cut-off districts), road over the Birgunj–Raxaul crossing
+(weeks), or sea and road (months — Nepal is landlocked and the ocean stops at
+Kolkata). Then choose how to read the sources: kindest, midpoint, or harshest.
 
 **The ledger.** Every line opens. Freight, handling, customs brokerage, inland
 transport, sorting labour, storage in a congested pipeline, disposal of what
@@ -138,10 +140,11 @@ UNICEF and CDC on infant formula, WRAP and NIST on textile reuse, and Nepal's
 is a number typed by hand.
 
 The rate table holds **14 cells**. Each one is a range, not a point, with a
-publisher, a date and a confidence. The engine's default bias is `generous`: it
-reads every range at whichever end flatters the donation — costs at their low
-end, usable fractions at their high end — so a bad verdict is one you cannot
-argue your way out of. Flip the bias and watch the ledger get worse.
+publisher, a date and a confidence. The default reading is the kindest one — every
+cost at the low end of its range, every usefulness at the high end, storage at
+zero — so a bad verdict is one you cannot argue your way out of. Midpoint takes
+the middle of every range. Harshest costs high, usefulness low, and leaves the
+consignment uncollected for the twelve months it sat uncollected in Vanuatu.
 
 **Four of the fourteen are assumptions, and the code says so in the same words:**
 

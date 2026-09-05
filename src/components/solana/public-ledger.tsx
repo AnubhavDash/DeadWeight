@@ -263,7 +263,8 @@ export function PublicLedger() {
             void readNotary().then(setState);
           }}
           disabled={loading}
-          className="text-[10px] uppercase tracking-[0.16em] text-meltwater transition-colors hover:text-sonar disabled:opacity-40"
+          // Padded to a thumb-sized target; the 10px small caps render 15px tall.
+          className="-my-1.5 py-1.5 text-[10px] uppercase tracking-[0.16em] text-meltwater transition-colors hover:text-sonar disabled:opacity-40"
         >
           {loading ? "reading devnet…" : "refresh"}
         </button>
