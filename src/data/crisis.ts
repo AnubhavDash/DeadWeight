@@ -115,6 +115,16 @@ export const APPEALS: readonly {
   source?: CitationId;
 }[] = [
   {
+    // The URL is right, and it cannot be checked the ordinary way: GlobalGiving
+    // answers 403 to automated retrieval on every path, homepage included, from
+    // curl and from a real headless Chromium alike — a PerimeterX "press & hold
+    // to confirm you are a human" wall. That is a bot wall, not a dead link, and
+    // a phone will not see it. Verified instead through the host's own router,
+    // which runs in front of the wall: `/funds/nepal-flood-relief-fund/` answers
+    // `301` to this exact URL, while `/funds/<a-slug-that-does-not-exist>/`
+    // answers `301` to the homepage. Real slugs resolve to their canonical
+    // project page, invented ones are dumped at the front door. So do not
+    // "correct" this to the homepage or to `/funds/` on the strength of a 403.
     name: "GlobalGiving Nepal Flood Relief Fund",
     url: "https://www.globalgiving.org/projects/nepal-flood-relief-fund/",
     note: "Flexible grants to Nepali organisations already working in the districts — in-region procurement under another name, which is the whole argument of this page.",
