@@ -88,30 +88,64 @@ export const CRISIS = {
   },
 } as const;
 
-/** Where money should actually go. The app takes none of it. */
+/**
+ * Where money should actually go. The app takes none of it.
+ *
+ * Every entry is a page that can take a donation, which sounds obvious and was
+ * not true of this list before: it opened with four organisation homepages, and
+ * a homepage is a place to read about a response rather than a place to fund
+ * one. The order is the site's own argument — the further up the list, the more
+ * of the dollar is spent inside Nepal by someone who was already there.
+ *
+ * `source` is set where the note makes a claim a reader should be able to check.
+ * It renders as plain text, not a link: the whole tile is already an anchor and
+ * an anchor inside an anchor is not valid HTML. The sources page carries the
+ * clickable version.
+ *
+ * Deliberately not linked: the World Food Programme, WHO, Catholic Relief
+ * Services, Save the Children, World Vision and Plan International, all of
+ * which the New York Times reports are running responses. They are named in the
+ * prose instead, because we have not checked a giving page for each of them and
+ * a list like this should not imply more verification than it has had.
+ */
 export const APPEALS: readonly {
   name: string;
   url: string;
   note: string;
+  source?: CitationId;
 }[] = [
+  {
+    name: "GlobalGiving Nepal Flood Relief Fund",
+    url: "https://www.globalgiving.org/projects/nepal-flood-relief-fund/",
+    note: "Flexible grants to Nepali organisations already working in the districts — in-region procurement under another name, which is the whole argument of this page.",
+  },
+  {
+    name: "Prime Minister’s Disaster Relief Fund",
+    url: "https://pmdrf.nchl.com.np/",
+    note: "Nepal’s own fund, taking cards from anywhere in the world. Spendable by law on rescue, treatment, relief, rehabilitation and infrastructure — not on administration — and audited annually.",
+    source: "kathmandu-post-how-to-help-2026",
+  },
+  {
+    name: "IFRC Nepal flash floods appeal",
+    url: "https://donate.redcrossredcrescent.org/ifrc/nepal-flash-floods/~my-donation?_cv=1",
+    note: "Funds the Nepal Red Cross Society, which was in the affected districts before there was an appeal to write.",
+    source: "nyt-nepal-donate-2026",
+  },
   {
     name: "UN Nepal flash appeal",
     url: "https://nepal.un.org/en",
-    note: "The US$49.6 million appeal of 4 September 2026, cash assistance first.",
+    note: "The US$49.6 million appeal of 4 September 2026, cash assistance first. The yardstick the ledger above measures your consignment against.",
+    source: "un-nepal-flash-appeal-2026",
   },
   {
-    name: "Nepal Red Cross Society",
-    url: "https://nrcs.org/",
-    note: "Domestic responder, already positioned in the affected districts.",
-  },
-  {
-    name: "Direct Relief",
-    url: "https://www.directrelief.org/",
-    note: "Medical supply, procured to request rather than donated in kind.",
+    name: "Direct Relief — Nepal flood relief",
+    url: "https://www.directrelief.org/emergency/nepal-floods-2026/",
+    note: "Medical supply, procured against a request from the field rather than donated in kind.",
   },
   {
     name: "UNICEF Nepal",
     url: "https://www.unicef.org/nepal/",
     note: "Water, sanitation and hygiene for the 22,000+ children reported to need it.",
+    source: "unicef-nepal-27aug2026",
   },
 ];

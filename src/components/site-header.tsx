@@ -30,8 +30,16 @@
  * changing where they sit; the Give box gets there on real padding instead,
  * since its border has to enclose something. At 382px the four destinations sit
  * in a 2x2 grid under the wordmark — one dominant name, four full-height
- * targets, and two rows that start at the same two x positions rather than
- * wherever the wrap happened to fall.
+ * targets, and two rows on the same two x positions rather than wherever the
+ * wrap happened to fall.
+ *
+ * That stack is centred below `sm` and only below `sm`. Left-aligned it read as
+ * a row that had overflowed onto a second line, because the wordmark takes 311
+ * of the 342px a phone offers and the nav underneath it takes all of them — two
+ * full-width blocks flush left, with a ragged right edge and no margin to
+ * explain why. Centred, the same two blocks read as a masthead. From `sm` up the
+ * bar is a single row again and the wordmark belongs hard left against the page
+ * gutter, so `justify-between` comes back and the centring is dropped.
  */
 
 import Link from "next/link";
@@ -78,15 +86,14 @@ const PAGES = [
   { href: "/sources", label: "Sources" },
 ] as const;
 
-const LINK =
-  "relative -my-2 justify-self-start py-2 text-base uppercase tracking-[0.16em] transition-colors";
+const LINK = "relative -my-2 py-2 text-base uppercase tracking-[0.16em] transition-colors";
 
 export function SiteHeader() {
   const pathname = usePathname();
 
   return (
     <header className="border-b border-rule">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-3 px-5 py-3.5 sm:px-8">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-6 gap-y-3 px-5 py-3.5 sm:justify-between sm:px-8">
         <Link
           href="/"
           aria-label="Deadweight"
@@ -105,9 +112,11 @@ export function SiteHeader() {
           // destinations always land on their own line or two. Wrapping them left
           // each row starting at a different x; a 2x2 grid puts the second row
           // under the first, which is the difference between a header that looks
-          // laid out and one that looks overflowed. From `sm` up the whole nav
-          // fits on one line and the grid is dropped.
-          className="grid w-full grid-cols-2 items-center gap-x-5 gap-y-2 sm:flex sm:w-auto sm:flex-wrap"
+          // laid out and one that looks overflowed. `justify-items-center` is
+          // what centres the four inside that grid, and it needs no `sm:` reset:
+          // it is a grid-only property, so it stops applying by itself the moment
+          // the nav becomes a flex row and the grid is dropped.
+          className="grid w-full grid-cols-2 items-center justify-items-center gap-x-5 gap-y-2 sm:flex sm:w-auto sm:flex-wrap"
         >
           {PAGES.map((page) => {
             const active = pathname === page.href;
@@ -131,7 +140,7 @@ export function SiteHeader() {
             href="https://nepal.un.org/en"
             target="_blank"
             rel="noreferrer noopener"
-            className="justify-self-start border border-sonar/45 px-3 py-1.5 text-base uppercase tracking-[0.16em] text-sonar transition-colors hover:border-sonar hover:bg-sonar/10"
+            className="border border-sonar/45 px-3 py-1.5 text-base uppercase tracking-[0.16em] text-sonar transition-colors hover:border-sonar hover:bg-sonar/10"
           >
             Give <span aria-hidden="true">→</span>
           </a>

@@ -231,8 +231,8 @@ whether there's a voice behind it.
 I'll say the unfashionable part first: nothing in this app needs a blockchain, and
 I refuse to pretend otherwise. There's no token, no treasury, no yield, no
 "transparent donation rails". **The app collects no money at all** — every giving
-link leaves the site for the UN flash appeal, Nepal Red Cross, Direct Relief or
-UNICEF.
+link leaves the site for a page that can take a donation directly, six of them,
+starting with GlobalGiving's Nepal fund and Nepal's own disaster relief fund.
 
 What a public ledger *is* honestly good at here is one narrow thing: a decision
 that can't be quietly revised afterwards. If you price your consignment, read the
@@ -415,11 +415,34 @@ So: keep the instinct. Someone is cold and you have a coat, and that impulse is
 the only reason any of this machinery exists to be criticised. Just send the thing
 that arrives.
 
-Nothing in this app takes your money. When you're ready, give to the same four
-places it points at — the [UN Nepal flash appeal](https://nepal.un.org/en),
-the [Nepal Red Cross Society](https://nrcs.org/), [Direct
-Relief](https://www.directrelief.org/), or [UNICEF
-Nepal](https://www.unicef.org/nepal/).
+Nothing in this app takes your money. When you're ready, give to the same six
+places it points at. Every one of them is a page that can actually take a
+donation — not an organisation's homepage — and they're in the order the site
+argues for: the further up, the more of the dollar is spent inside Nepal by
+someone who was already there.
+
+1. [GlobalGiving Nepal Flood Relief
+   Fund](https://www.globalgiving.org/projects/nepal-flood-relief-fund/) —
+   flexible grants to Nepali organisations already working in the districts,
+   which is in-region procurement under another name.
+2. [Nepal's Prime Minister's Disaster Relief Fund](https://pmdrf.nchl.com.np/) —
+   the country's own fund, taking cards from anywhere in the world.
+3. [IFRC Nepal flash floods
+   appeal](https://donate.redcrossredcrescent.org/ifrc/nepal-flash-floods/~my-donation?_cv=1)
+   — funds the Nepal Red Cross Society, which was in the districts before there
+   was an appeal to write.
+4. [The UN Nepal flash appeal](https://nepal.un.org/en) — the US$49.6 million
+   one, cash assistance first.
+5. [Direct Relief](https://www.directrelief.org/emergency/nepal-floods-2026/) —
+   medical supply, procured against a request from the field.
+6. [UNICEF Nepal](https://www.unicef.org/nepal/) — water, sanitation and hygiene
+   for the 22,000+ children reported to need it.
+
+The World Food Programme, the WHO, Catholic Relief Services, Save the Children,
+World Vision and Plan International are all reported to be responding too. They're
+named here rather than linked because I haven't opened and checked a giving page
+for each of them, and a list of places to send money shouldn't imply more checking
+than it's had.
 
 **Live:** https://deadweight-jet.vercel.app
 **Repo:** https://github.com/AnubhavDash/DeadWeight

@@ -29,7 +29,7 @@ const CITATION_IDS = Object.keys(CITATIONS) as CitationId[];
 const RETRIEVAL_NOTE: Record<"primary" | "secondary" | "snippet", string> = {
   primary: "document fetched and read",
   secondary: "a named third party reports the figure from a study",
-  snippet: "host refused automated retrieval — quote taken from a search index",
+  snippet: "document could not be read — quote reached us second-hand",
 };
 
 /** The three kinds of cell, in the order of how much they can be trusted. */
@@ -205,10 +205,11 @@ export default function SourcesPage() {
             Sources we could not read
           </h2>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-meltwater">
-            {UNVERIFIED.length} of {CITATION_IDS.length} citations come from a search snippet rather
-            than the document itself, because the host returned 403 to automated retrieval. The quote
-            is real; we have not read it in context. Anywhere one of these decides a ledger line, the
-            line says so.
+            {UNVERIFIED.length} of {CITATION_IDS.length} citations quote text we could not read in
+            the document itself — mostly because the host returned 403 to automated retrieval, and in
+            one case because the paper is paywalled and the passage reached us second-hand. The quote
+            is real either way; we have not seen it in context. Anywhere one of these decides a
+            ledger line, the line says so.
           </p>
           <ul className="mt-4 space-y-3">
             {UNVERIFIED.map((id) => (

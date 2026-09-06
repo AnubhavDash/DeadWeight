@@ -10,9 +10,11 @@
  * `retrieval` records how honestly we came by the text:
  *   primary   — the document was fetched and read.
  *   secondary — a named third party reports the figure from a study.
- *   snippet   — the host refused automated retrieval (403); the quote is from a
- *               search index and has not been read in context. Treated as the
- *               weakest form of evidence and surfaced as such in the UI.
+ *   snippet   — the document itself could not be read. Either the host refused
+ *               automated retrieval (403) and the quote comes from a search
+ *               index, or the text reached us second-hand. Either way it has not
+ *               been read in context, and it is treated as the weakest form of
+ *               evidence and surfaced as such in the UI.
  *
  * Nothing here is a moving number. Death tolls, appeal coverage and exchange
  * rates move, so they are either not shown at all or carry an explicit `asOf` at
@@ -45,7 +47,9 @@ export type CitationId =
   | "unhcr-bms-sop"
   | "unicef-bms-technical-note"
   | "un-nepal-flash-appeal-2026"
-  | "unicef-nepal-27aug2026";
+  | "unicef-nepal-27aug2026"
+  | "kathmandu-post-how-to-help-2026"
+  | "nyt-nepal-donate-2026";
 
 export interface Citation {
   readonly title: string;
@@ -315,6 +319,30 @@ export const CITATIONS: Readonly<Record<CitationId, Citation>> = {
     published: "2026-08-27",
     quote:
       "Around 65,000 people have been affected across Rasuwa, Nuwakot and Dhading districts, including more than 17,000 children; over 22,000 children need safe drinking water, sanitation and hygiene support.",
+    retrieval: "snippet",
+  },
+
+  /* --- Where money should go, and on what terms -------------------------- */
+
+  "kathmandu-post-how-to-help-2026": {
+    title: "How people can help Nepal’s flood-affected communities",
+    publisher: "The Kathmandu Post",
+    url: "https://kathmandupost.com/national/2026/08/27/how-people-can-help-nepal-s-flood-affected-communities",
+    published: "2026-08-27",
+    quote:
+      "By law, the fund can only be used for rescue, treatment, relief, rehabilitation and infrastructure restoration — not administrative costs — and its accounts are audited annually.",
+    retrieval: "primary",
+  },
+
+  "nyt-nepal-donate-2026": {
+    // Not the headline — the paper's own text could not be retrieved, so this
+    // describes the piece rather than claiming to quote its title.
+    title: "Aid organizations responding to the Nepal floods, and how to give to them",
+    publisher: "The New York Times",
+    url: "https://www.nytimes.com/2026/09/01/world/asia/nepal-floods-tibet-aid-relief-how-donate.html",
+    published: "2026-09-01",
+    quote:
+      "The Nepal Red Cross Society is delivering items like first aid kits, tents and mattresses. It has also set up a station for phone charging so people can communicate with relatives and friends.",
     retrieval: "snippet",
   },
 };

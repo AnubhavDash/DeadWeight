@@ -203,8 +203,11 @@ rest on the same kind of number. The reasoning is written out above
 `APPEAL_USD_PER_PERSON` in `src/data/rates.ts`.
 
 **Any way to give Deadweight money.** There is no payment path in the codebase.
-Every giving link leaves the site for the flash appeal, Nepal Red Cross, Direct
-Relief or UNICEF.
+Every giving link leaves the site for a page that can take a donation directly —
+GlobalGiving's Nepal fund, Nepal's own Prime Minister's Disaster Relief Fund, the
+IFRC appeal that funds the Nepal Red Cross Society, the UN flash appeal, Direct
+Relief and UNICEF Nepal, in that order. Not one of them is an organisation's
+homepage, which is what that list used to be.
 
 ---
 

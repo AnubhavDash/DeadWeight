@@ -191,9 +191,11 @@ export default function Home() {
             Where to send it instead
           </h2>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-meltwater">
-            Deadweight accepts nothing. Every link below goes off this site, to the response&rsquo;s
-            own appeal or to an agency running it, and each of them can buy in the region what a
-            container of goods spends its whole value trying to get there.
+            Deadweight accepts nothing. Every link below goes off this site to a page that can take
+            a donation — not to an organisation&rsquo;s homepage — and each of them can buy in the
+            region what a container of goods spends its whole value trying to get there. They are in
+            order: the further up, the more of the dollar is spent inside Nepal by someone who was
+            already there.
           </p>
           <ul className="mt-6 grid gap-3 sm:grid-cols-2">
             {APPEALS.map((appeal) => (
@@ -208,10 +210,27 @@ export default function Home() {
                   <span className="mt-1 block text-sm leading-relaxed text-meltwater">
                     {appeal.note}
                   </span>
+                  {/* Plain text, not a link: the tile is already the anchor, and
+                      an anchor inside an anchor is not valid HTML. The sources
+                      page carries the clickable version of every one of these. */}
+                  {appeal.source ? (
+                    <span className="ledger mt-1.5 block text-2xs text-meltwater/80">
+                      {citationLabel(appeal.source)}
+                    </span>
+                  ) : null}
                 </a>
               </li>
             ))}
           </ul>
+          <p className="mt-6 max-w-3xl text-sm leading-relaxed text-meltwater">
+            Longer lists exist, and the six above are not the whole response. The World Food
+            Programme, the WHO, Catholic Relief Services, Save the Children, World Vision and Plan
+            International are all reported to be running one.{" "}
+            <span className="text-paper">They are named here rather than linked above</span> because
+            we have not opened and checked a giving page for each of them, and a list of places to
+            send money should not imply more checking than it has had.{" "}
+            <Source id="nyt-nepal-donate-2026" />
+          </p>
         </section>
       </main>
       <SiteFooter />
