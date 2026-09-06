@@ -136,8 +136,17 @@ export function SiteHeader() {
               </Link>
             );
           })}
+          {/*
+            Nepal's own Prime Minister's Disaster Relief Fund, not the UN country
+            page this used to point at. A button labelled GIVE has to land on a
+            form that takes money — this one does, verified: 200, one amount
+            field — and of the destinations the site ranks, this is the one where
+            the fewest hands touch the dollar between here and the districts.
+            Spendable by law on relief and rehabilitation, not administration.
+            The full ranked list, with the reason for each, is at /#instead.
+          */}
           <a
-            href="https://nepal.un.org/en"
+            href="https://pmdrf.nchl.com.np/"
             target="_blank"
             rel="noreferrer noopener"
             className="border border-sonar/45 px-3 py-1.5 text-base uppercase tracking-[0.16em] text-sonar transition-colors hover:border-sonar hover:bg-sonar/10"

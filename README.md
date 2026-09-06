@@ -147,7 +147,7 @@ the pricing rule, the branded-cents arithmetic, the prohibited-item paths, the
 
 ## Where the numbers come from
 
-Twenty-five sources, each cited in the UI with its own date and a link that opens
+Twenty-seven sources, each cited in the UI with its own date and a link that opens
 off-site: the UN's Nepal flash appeal, the World Bank on air freight, the IRC on
 the 2026 freight spike and on cost-efficiency, Airlink, OCHA and the Logistics
 Cluster on unsolicited goods, IFRC Disaster Law's Vanuatu review, USAID's CIDI
@@ -158,9 +158,14 @@ is a number typed by hand.
 
 Every citation also records **how honestly we came by it** — `primary` (the
 document was fetched and read), `secondary` (a named third party reports the
-figure), or `snippet` (the host refused automated retrieval, so the quote comes
-from a search index and has not been read in context). The UI surfaces that
-grading, and `snippet` is treated as the weakest form of evidence there is.
+figure), or `snippet` (the host refused automated retrieval so the quote comes from
+a search index, or the text reached us second-hand; either way it has not been read
+in context). The current split is **4 primary, 2 secondary, 21 snippet**. That is
+not a flattering ratio and it is on the page anyway: the UI surfaces the grading,
+`snippet` is treated as the weakest form of evidence there is, and a reader who
+wants to check the arithmetic can see which rows to distrust first. `UNVERIFIED` in
+`src/data/citations.ts` derives that list from the data rather than restating it, so
+this count cannot drift from the registry without the export changing too.
 
 The rate table holds **14 cells**. Each one is a range, not a point, with a
 publisher, a date and a confidence. The default reading is the kindest one — every
@@ -203,11 +208,17 @@ rest on the same kind of number. The reasoning is written out above
 `APPEAL_USD_PER_PERSON` in `src/data/rates.ts`.
 
 **Any way to give Deadweight money.** There is no payment path in the codebase.
-Every giving link leaves the site for a page that can take a donation directly —
-GlobalGiving's Nepal fund, Nepal's own Prime Minister's Disaster Relief Fund, the
-IFRC appeal that funds the Nepal Red Cross Society, the UN flash appeal, Direct
-Relief and UNICEF Nepal, in that order. Not one of them is an organisation's
-homepage, which is what that list used to be.
+Every giving link leaves the site for a page that was opened and confirmed to take
+a donation — GlobalGiving's Nepal fund, Nepal's own Prime Minister's Disaster
+Relief Fund, the IFRC appeal that funds the Nepal Red Cross Society, and Direct
+Relief, in that order. That list used to be six, and the two it lost were both
+organisation homepages standing in for donate pages that turned out not to exist:
+a UN flash appeal is funded by member states and pooled funds rather than by card
+(`crisisrelief.un.org/en/nepal-floods` is a 404, and so is an invented slug, so the
+routing is honest), and no UNICEF Nepal-flood page could be verified from here
+because `unicef.org` answers Cloudflare's 403 to automated retrieval on real and
+invented paths alike. Both are named in the prose on the page instead. The header's
+GIVE button points at the Prime Minister's fund.
 
 **Every other disaster.** The engine is crisis-agnostic as a fact about the
 imports: `src/lib/logistics.ts` never imports `crisis.ts` — it prices a `Manifest`

@@ -297,10 +297,12 @@ anchor build --arch v0
 cargo test --manifest-path programs/deadweight/Cargo.toml   # 12 tests, LiteSVM
 ```
 
-Second one: this project sets `legacy-peer-deps=true` in `.npmrc` (more on why
-below), and that flag applies to `npx` runs from the same directory — which is how
-`anchor idl init` came to die on a missing `@solana/kit`. `npm_config_legacy_peer_deps=false`
-in front of it, and the IDL uploaded fine.
+Second one: this project sets `legacy-peer-deps=true` in `.npmrc` — because
+`@solana-mobile/wallet-adapter-mobile` declares `react-native` as a non-optional
+peer, npm dutifully installs it, and nothing in a web app ever resolves the
+`index.native.js` that needs it — and that flag applies to `npx` runs from the same
+directory, which is how `anchor idl init` came to die on a missing `@solana/kit`.
+`npm_config_legacy_peer_deps=false` in front of it, and the IDL uploaded fine.
 
 ## What I refused to build
 
@@ -338,33 +340,6 @@ crisis isn't a config change. It's sourcing a second response's freight, wages a
 appeal to the same standard, then re-deriving the *requested* column against a
 different priority list. The generic version of this app averages those three away,
 and the average is precisely what makes a number useless.
-
-**A green audit badge I hadn't earned.** GitHub reported eight advisories on the
-default branch: 1 critical, 4 high, 2 moderate, 1 low. Six are gone — a `vitest`
-patch bump for the critical, `overrides` pinning `toml` to 4.3.0 and `uuid` to
-11.1.1, and **React Native uninstalled entirely**, which took metro and 69 packages
-with it and removed two unpatchable `image-size` DoS advisories that had no fix to
-install. (`@solana-mobile/wallet-adapter-mobile` declares `react-native` as a
-non-optional peer, npm dutifully installs it, and nothing in a web app ever
-resolves the `index.native.js` that needs it. Hence `legacy-peer-deps=true`, with
-the reasoning written out in `.npmrc`.)
-
-Two stay, and here is why. `stream-json` 1.9.1 under `jayson` is a
-moderate O(depth²) parser DoS. It can't be bumped — the patched line is pure ESM
-whose `exports` map doesn't answer `jayson`'s
-`require('stream-json/streamers/StreamValues')` — and it can't be reached, because
-the vulnerable filters live in `jayson`'s TCP and TLS transports and
-`@solana/web3.js` requires exactly one entry point, `jayson/lib/client/browser`,
-which contains no stream parser at all.
-
-The eighth isn't a JavaScript package, which is the part worth passing on:
-**Dependabot reads `Cargo.lock` too, and `npm audit` structurally cannot see it.**
-That one is `rand` 0.7.3, unsound only under a custom `log` logger that reseeds the
-thread-local generator mid-call. There's no custom logger here, it reaches the tree
-on a dev edge only — `litesvm` → `agave-syscalls` → `libsecp256k1` → `rand` — so
-`cargo tree -e normal` doesn't contain it at any version, and it can't be moved
-anyway, because `libsecp256k1` 0.6.0 asks for `rand = "^0.7"` and the fix is 0.8.6.
-Documented beats dismissed.
 
 ## It works with the GPU switched off, and at 382px
 
@@ -409,12 +384,17 @@ the README as well as here. The components aren't redistributed as a library fro
 my repo. [DavidHDev](https://github.com/DavidHDev) builds the nicest visual
 primitives on the web right now and it isn't close.
 
-Twenty-five sources, each cited in the UI with its own date, its publisher, a link
-that opens off-site, and a grading of how honestly I came by it — `primary` if I
-fetched and read the document, `secondary` if a named third party reports the
-figure, `snippet` if the host refused automated retrieval and the quote came from a
-search index unread in context. That last grade exists because I'd rather show you
-weak evidence labelled weak than launder it.
+Twenty-seven sources, each cited in the UI with its own date, its publisher, a link
+that opens off-site, and a grading of how honestly I came by it. Four are
+`primary` — I fetched the document and read it. Two are `secondary` — a named third
+party reports the figure from a study. The remaining **twenty-one are `snippet`**:
+the host refused automated retrieval and the quote came from a search index, or the
+text reached me second-hand, and either way it has not been read in context.
+
+That ratio is not flattering and it is on the page anyway, because the alternative
+was to quietly promote a search-result quote to something I'd read. Weak evidence
+labelled weak beats laundered evidence, and a reader who wants to check the
+arithmetic can see exactly which rows to distrust first.
 
 ## The coat, again
 
@@ -430,32 +410,45 @@ So: keep the instinct. Someone is cold and you have a coat, and that impulse is
 the only reason any of this machinery exists to be criticised. Just send the thing
 that arrives.
 
-Nothing in this app takes your money. When you're ready, give to the same six
-places it points at. Every one of them is a page that can actually take a
-donation — not an organisation's homepage — and they're in the order the site
-argues for: the further up, the more of the dollar is spent inside Nepal by
-someone who was already there.
+Nothing in this app takes your money. When you're ready, give to the same four
+places it points at. Every one of them is a page I opened and confirmed can take a
+donation, and they're in the order the site argues for: the further up, the more of
+the dollar is spent inside Nepal by someone who was already there.
 
 1. [GlobalGiving Nepal Flood Relief
    Fund](https://www.globalgiving.org/projects/nepal-flood-relief-fund/) —
    flexible grants to Nepali organisations already working in the districts,
    which is in-region procurement under another name.
 2. [Nepal's Prime Minister's Disaster Relief Fund](https://pmdrf.nchl.com.np/) —
-   the country's own fund, taking cards from anywhere in the world.
+   the country's own fund, taking cards from anywhere in the world. Spendable by
+   law on rescue, treatment, relief, rehabilitation and infrastructure, not on
+   administration, and audited annually. It's what the GIVE button in the header
+   points at.
 3. [IFRC Nepal flash floods
    appeal](https://donate.redcrossredcrescent.org/ifrc/nepal-flash-floods/~my-donation?_cv=1)
    — funds the Nepal Red Cross Society, which was in the districts before there
    was an appeal to write.
-4. [The UN Nepal flash appeal](https://nepal.un.org/en) — the US$49.6 million
-   one, cash assistance first.
-5. [Direct Relief](https://www.directrelief.org/emergency/nepal-floods-2026/) —
+4. [Direct Relief](https://www.directrelief.org/emergency/nepal-floods-2026/) —
    medical supply, procured against a request from the field.
-6. [UNICEF Nepal](https://www.unicef.org/nepal/) — water, sanitation and hygiene
-   for the 22,000+ children reported to need it.
 
-The World Food Programme, the WHO, Catholic Relief Services, Save the Children,
-World Vision and Plan International are all reported to be responding too. They're
-named here rather than linked because I haven't opened and checked a giving page
+This list was six until an hour before I published, and the two it lost are worth a
+paragraph, because cutting them is the same discipline as the rest of the app. The
+**UN flash appeal** came out because a flash appeal has no card form: it's funded by
+member states, CERF and pooled funds. `crisisrelief.un.org/en/nepal-floods` is a
+404, and so is `/en/this-slug-is-fake`, so the routing is honest and there's nothing
+behind it. The appeal is still all over the page — it's the yardstick the ledger
+measures your consignment against — just not as a place to send twenty dollars.
+**UNICEF Nepal** came out because I couldn't verify a donate page for it:
+`unicef.org` answers Cloudflare's 403 to automated retrieval on
+`help.unicef.org/nepal-floods`, on `unicef.org/nepal/take-action`, and on a path I
+invented to test the wall. Indiscriminate walls tell you nothing, and shipping a
+guessed URL that 404s on somebody's phone is worse than naming the agency in prose.
+Both of them were in the list for the same bad reason: a big agency *must* have a
+page for this. Two of them didn't.
+
+UNICEF, the World Food Programme, the WHO, Catholic Relief Services, Save the
+Children, World Vision and Plan International are all reported to be responding too.
+They're named here rather than linked because I couldn't open and check a giving page
 for each of them, and a list of places to send money shouldn't imply more checking
 than it's had.
 

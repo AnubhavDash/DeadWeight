@@ -107,6 +107,26 @@ export const CRISIS = {
  * which the New York Times reports are running responses. They are named in the
  * prose instead, because we have not checked a giving page for each of them and
  * a list like this should not imply more verification than it has had.
+ *
+ * Two entries were removed from this list for the same reason, having been put
+ * here on the assumption that a large agency must have a giving page for a given
+ * emergency. Neither does, as far as this build can show:
+ *
+ *   The UN flash appeal has no retail donate route, and that is a fact about how
+ *   appeals work rather than a gap in our searching — they are funded by member
+ *   states, CERF and pooled funds. `crisisrelief.un.org/en/nepal-floods` and
+ *   `/en/nepal` both answer 404, and so does `/en/this-slug-is-fake`, so the
+ *   routing is honest and there is nothing behind it. `nepal.un.org/en/donate`
+ *   answers 403. The appeal stays on the page as the yardstick the ledger
+ *   measures against, which is what it is, and it keeps its citation.
+ *
+ *   UNICEF certainly does take money, and no Nepal-flood page of theirs could be
+ *   verified from here: `unicef.org` answers Cloudflare's 403 interstitial to
+ *   automated retrieval on `help.unicef.org/nepal-floods`, on
+ *   `unicef.org/nepal/take-action`, and — the point — on an invented path too.
+ *   The wall is indiscriminate, so unlike the GlobalGiving case below there is no
+ *   signal in it to read. Guessing a donate URL that renders a 404 on a phone is
+ *   worse than naming the agency in prose, so it is named in prose.
  */
 export const APPEALS: readonly {
   name: string;
@@ -142,20 +162,8 @@ export const APPEALS: readonly {
     source: "nyt-nepal-donate-2026",
   },
   {
-    name: "UN Nepal flash appeal",
-    url: "https://nepal.un.org/en",
-    note: "The US$49.6 million appeal of 4 September 2026, cash assistance first. The yardstick the ledger above measures your consignment against.",
-    source: "un-nepal-flash-appeal-2026",
-  },
-  {
     name: "Direct Relief — Nepal flood relief",
     url: "https://www.directrelief.org/emergency/nepal-floods-2026/",
     note: "Medical supply, procured against a request from the field rather than donated in kind.",
-  },
-  {
-    name: "UNICEF Nepal",
-    url: "https://www.unicef.org/nepal/",
-    note: "Water, sanitation and hygiene for the 22,000+ children reported to need it.",
-    source: "unicef-nepal-27aug2026",
   },
 ];

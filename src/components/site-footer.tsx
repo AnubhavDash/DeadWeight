@@ -51,13 +51,14 @@ export function SiteFooter() {
         </div>
 
         {/*
-          Builder first, library second. Written the other way round — "canvas-ui
-          by David Haz, by an0n99x" — the two `by`s land side by side and the
-          sentence can be read as though one name were the other's, which is the
-          one thing an attribution line must not do.
+          One sentence, two `by`s, and they must not touch. Written as "made with
+          ❤️ and canvas-ui by an0n99x" the library reads as though it were mine;
+          written as "canvas-ui by David Haz, by an0n99x" the two names collide.
+          Builder, then tool, then tool's author — each `by` next to the thing it
+          belongs to.
         */}
         <p className="hairline mt-8 pt-5">
-          Made by{" "}
+          Made with ❤️ by{" "}
           <a
             href="https://dev.to/an0n99x"
             target="_blank"
@@ -65,8 +66,8 @@ export function SiteFooter() {
             className={LINK}
           >
             an0n99x
-          </a>{" "}
-          with ❤️ and{" "}
+          </a>
+          , using{" "}
           <a
             href="https://github.com/DavidHDev/canvas-ui"
             target="_blank"
