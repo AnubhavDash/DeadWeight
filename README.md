@@ -209,6 +209,19 @@ IFRC appeal that funds the Nepal Red Cross Society, the UN flash appeal, Direct
 Relief and UNICEF Nepal, in that order. Not one of them is an organisation's
 homepage, which is what that list used to be.
 
+**Every other disaster.** The engine is crisis-agnostic as a fact about the
+imports: `src/lib/logistics.ts` never imports `crisis.ts` — it prices a `Manifest`
+against rate cells and returns a `Ledger` — and `instead.ts`, `money.ts` and
+`seal.ts` do not mention Nepal either. That is not the same thing as portable, and
+this file will not claim it is. Three of the inputs that decide a verdict are
+local: `SEA_PLUS_ROAD_PER_KG` exists because Nepal is landlocked and no sea leg
+reaches it alone, `SORTING_WAGE_PER_HOUR` is Nepal's statutory minimum wage at a
+dated conversion, and whether an item counts as *requested* is scored in
+`catalog.ts` against this appeal's published priority list — which is why
+cold-weather shelter passes here and would not in a tropical flood. A second
+response means sourcing all three to the same standard and re-deriving that
+column, not re-pointing a constant. Calibrating to one response is the design.
+
 **A `vercel.json`.** Next.js on Vercel is zero-config — the framework is detected,
 the commands are inferred, and every route in `app/` is wired up without being
 declared anywhere. A `vercel.json` restating those defaults would be a second

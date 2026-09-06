@@ -324,6 +324,21 @@ is the freight and the sorting and the disposal — which is the actual claim.
 **Any way to give Deadweight money.** No payment path in the codebase. Not
 disabled — absent.
 
+**Every other disaster.** Deadweight prices one response, and that's the design
+rather than a limit I ran out of time to lift. Three of the things that decide a
+verdict are local. Nepal is landlocked, so the cheap freight mode doesn't exist —
+a sea leg ends at Kolkata and buys you a road leg and months of transit on top.
+The sorting wage is Nepal's statutory minimum, dated and converted. And whether an
+item counts as *requested* is scored against **this appeal's own published
+priority list**, which is why a blanket passes here and wouldn't in a tropical
+flood. The engine underneath genuinely doesn't know where it is — `logistics.ts`
+never imports `crisis.ts`, it prices a manifest against rate cells and hands back
+a ledger — but I'm not going to dress that up as portability, because swapping the
+crisis isn't a config change. It's sourcing a second response's freight, wages and
+appeal to the same standard, then re-deriving the *requested* column against a
+different priority list. The generic version of this app averages those three away,
+and the average is precisely what makes a number useless.
+
 **A green audit badge I hadn't earned.** GitHub reported eight advisories on the
 default branch: 1 critical, 4 high, 2 moderate, 1 low. Six are gone — a `vitest`
 patch bump for the critical, `overrides` pinning `toml` to 4.3.0 and `uuid` to
