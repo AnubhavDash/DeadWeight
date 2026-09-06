@@ -88,7 +88,20 @@ export default function Home() {
         </header>
 
         <section className={`${SECTION} mt-16 sm:mt-20`} aria-labelledby="response">
-          <h2 id="response" className={EYEBROW}>
+          {/*
+            The one label on the site long enough that its own tracking breaks it.
+            At 0.2em this measures 357px and a 382px phone offers 342, so it wrapped
+            15px short and left the word "into" alone on a second line — a heading
+            reading as a sentence that ran out of room. 0.14em brings it to 325px,
+            which is one line with 17px to spare, and `sm:` restores the full
+            tracking the moment there is width for it. The hero eyebrow above keeps
+            0.2em: it needs 457px and cannot be made to fit at any tracking, so it
+            wraps at a `·` on purpose.
+          */}
+          <h2
+            id="response"
+            className="display text-xs uppercase tracking-[0.14em] text-meltwater sm:tracking-[0.2em]"
+          >
             The response you would be sending into
           </h2>
           <div className="mt-5 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">

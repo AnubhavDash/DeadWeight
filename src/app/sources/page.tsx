@@ -32,6 +32,30 @@ const RETRIEVAL_NOTE: Record<"primary" | "secondary" | "snippet", string> = {
   snippet: "host refused automated retrieval — quote taken from a search index",
 };
 
+/** The three kinds of cell, in the order of how much they can be trusted. */
+const CATEGORIES: readonly {
+  readonly term: string;
+  readonly tone: string;
+  readonly gloss: string;
+}[] = [
+  {
+    term: "Quoted",
+    tone: "text-paper",
+    gloss: "the sentence the number came out of is printed underneath it.",
+  },
+  {
+    term: "Derived",
+    tone: "text-paper",
+    gloss: "the arithmetic performed on the source is written out so you can repeat it.",
+  },
+  {
+    term: "Assumption",
+    tone: "text-crimson",
+    gloss:
+      "reasoned from guidance rather than taken from a source, and flagged as such everywhere it appears, including on the ledger line that uses it.",
+  },
+];
+
 function range(cell: Cell): string {
   return cell.low === cell.high ? `${cell.low}` : `${cell.low}–${cell.high}`;
 }
@@ -100,14 +124,34 @@ export default function SourcesPage() {
               the thing this project is about.
             </p>
             <p className="text-meltwater">
-              Every cell falls into exactly one of three categories, and there is no fourth.{" "}
-              <span className="text-paper">Quoted</span> — the sentence the number came out of is
-              printed underneath it. <span className="text-paper">Derived</span> — the arithmetic
-              performed on the source is written out so you can repeat it.{" "}
-              <span className="text-crimson">Assumption</span> — reasoned from guidance rather than
-              taken from a source, and flagged as such everywhere it appears, including on the ledger
-              line that uses it.
+              Every cell falls into exactly one of three categories, and there is no fourth.
             </p>
+            {/*
+              A three-term taxonomy set as one paragraph made the reader find the
+              terms inside the prose, which is backwards — the terms are the point
+              and the sentences are the gloss. At 382px it was also four solid
+              lines of grey with the category names buried mid-line. As a
+              description list each term is a label again: stacked on a phone, and
+              from `sm` up the glosses align down a single left edge so the three
+              can be compared at a glance. `items-baseline` because the term is set
+              a step down from the sentence beside it, and stretch alignment would
+              leave the smaller one riding high.
+            */}
+            <dl className="space-y-3 border-l border-rule pl-4">
+              {CATEGORIES.map((category) => (
+                <div
+                  key={category.term}
+                  className="grid gap-x-4 sm:grid-cols-[6rem_minmax(0,1fr)] sm:items-baseline"
+                >
+                  <dt
+                    className={`display text-2xs uppercase tracking-[0.16em] ${category.tone}`}
+                  >
+                    {category.term}
+                  </dt>
+                  <dd className="text-meltwater">{category.gloss}</dd>
+                </div>
+              ))}
+            </dl>
             <p className="text-meltwater">
               The engine reads costs at the low end of each range and usefulness at the high end by
               default, so every verdict on the front page is the best case these sources permit.
