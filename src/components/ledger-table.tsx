@@ -12,6 +12,7 @@ import type { Cell } from "@/data/rates";
 import { VERDICT_LABEL, type LedgerLine, type PricedManifest } from "@/lib/logistics";
 import { formatPercent, formatUsd } from "@/lib/money";
 import { cn } from "@/lib/utils";
+import { Leader } from "@/components/leader";
 
 function CellNote({ cell, assumption }: { cell?: Cell; assumption?: boolean }) {
   if (!cell) return null;
@@ -63,11 +64,12 @@ function CellNote({ cell, assumption }: { cell?: Cell; assumption?: boolean }) {
 }
 
 function Row({ line }: { line: LedgerLine }) {
-  const heading = line.kind === "declared" || line.kind === "total";
+  const total = line.kind === "total";
+  const heading = line.kind === "declared" || total;
 
   return (
-    <li className={cn("py-3", line.kind === "total" && "hairline mt-1 pt-4")}>
-      <div className="flex items-baseline justify-between gap-3">
+    <li className={cn("py-3", total && "hairline mt-1 pt-4")}>
+      <div className="flex items-baseline gap-3">
         <span
           className={cn(
             heading
@@ -77,10 +79,21 @@ function Row({ line }: { line: LedgerLine }) {
         >
           {line.label}
         </span>
+        {/*
+          No leader on the total, which is both the convention and a measured
+          necessity. A printed ledger rules a total off above and leaves the line
+          itself clear — the `hairline` does that job here — and dot-leading the
+          biggest figure on the page only adds noise to it. The measurement: at
+          382px `NET VALUE DELIVERED` against a `text-xl` figure has about 210px
+          for a label that wants 211, so reserving even the leader's 8px floor
+          breaks the longest label in the ledger across two lines. Every row above
+          the hairline has slack to spare; this one has none.
+        */}
+        {total ? null : <Leader />}
         <span
           className={cn(
-            "ledger shrink-0 tabular-nums",
-            line.kind === "total" ? "text-xl" : "text-sm",
+            "ledger ml-auto shrink-0 tabular-nums",
+            total ? "text-xl" : "text-sm",
             line.amount < 0 ? "text-crimson" : "text-paper",
           )}
         >

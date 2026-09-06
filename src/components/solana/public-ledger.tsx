@@ -19,6 +19,7 @@ import type { BN } from "@anchor-lang/core";
 
 import { CATALOG_BY_ID } from "@/data/catalog";
 import type { Bias } from "@/data/rates";
+import { Leader } from "@/components/leader";
 import { VERDICT_LABEL, type Mode, type Verdict } from "@/lib/logistics";
 import { cents, formatPercent, formatUsd, type Cents } from "@/lib/money";
 import {
@@ -108,9 +109,10 @@ function when(seconds: number): string {
 
 function Field({ label, value, tone }: { label: string; value: string; tone?: string }) {
   return (
-    <div className="flex items-baseline justify-between gap-3">
+    <div className="flex items-baseline gap-3">
       <dt className="uppercase tracking-[0.12em] text-meltwater">{label}</dt>
-      <dd className={cn("tabular-nums text-paper/90", tone)}>{value}</dd>
+      <Leader />
+      <dd className={cn("shrink-0 tabular-nums text-paper/90", tone)}>{value}</dd>
     </div>
   );
 }

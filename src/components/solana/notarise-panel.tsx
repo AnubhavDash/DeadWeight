@@ -23,6 +23,7 @@ import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { VERDICT_LABEL, type Manifest, type PricedManifest } from "@/lib/logistics";
 import { formatUsd } from "@/lib/money";
 import { cn } from "@/lib/utils";
+import { Leader } from "@/components/leader";
 import { DeadweightErrorCode } from "@/lib/solana/deadweight-errors";
 import type { Deadweight } from "@/lib/solana/deadweight-idl";
 import {
@@ -322,9 +323,10 @@ export function NotarisePanel({
 
 function Field({ label, value, tone }: { label: string; value: string; tone?: string }) {
   return (
-    <div className="flex items-baseline justify-between gap-3">
+    <div className="flex items-baseline gap-2.5">
       <dt className="uppercase tracking-[0.12em] text-meltwater">{label}</dt>
-      <dd className={cn("tabular-nums text-paper/90", tone)}>{value}</dd>
+      <Leader />
+      <dd className={cn("shrink-0 tabular-nums text-paper/90", tone)}>{value}</dd>
     </div>
   );
 }
