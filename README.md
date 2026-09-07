@@ -26,6 +26,8 @@ the whole argument of this project, and it is not ours — it is the response's.
 
 **Live demo:** https://deadweight-jet.vercel.app
 
+**Read the post:** [Deadweight: price your generosity before you ship it](https://dev.to/an0n99x/deadweight-price-your-generosity-before-you-ship-it-52op)
+
 ![The Deadweight header: the headline "Price your generosity before you ship it." beside a crate drawn as a WebGL particle cloud](docs/hero.png)
 
 ---
