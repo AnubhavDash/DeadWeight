@@ -26,8 +26,6 @@ the whole argument of this project, and it is not ours — it is the response's.
 
 **Live demo:** https://deadweight-jet.vercel.app
 
-**Video walkthrough:** *link goes here on submission*
-
 ![The Deadweight header: the headline "Price your generosity before you ship it." beside a crate drawn as a WebGL particle cloud](docs/hero.png)
 
 ---
