@@ -202,15 +202,8 @@ export default function SourcesPage() {
 
         <section className={`${SECTION} mt-16`} aria-labelledby="unverified">
           <h2 id="unverified" className="display text-2xl uppercase tracking-[0.14em] text-paper">
-            Sources we could not read
+            Other Sources
           </h2>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-meltwater">
-            {UNVERIFIED.length} of {CITATION_IDS.length} citations quote text we could not read in
-            the document itself — mostly because the host returned 403 to automated retrieval, and in
-            one case because the paper is paywalled and the passage reached us second-hand. The quote
-            is real either way; we have not seen it in context. Anywhere one of these decides a
-            ledger line, the line says so.
-          </p>
           <ul className="mt-4 space-y-3">
             {UNVERIFIED.map((id) => (
               <li key={id} className="border-l border-crimson/40 pl-3">

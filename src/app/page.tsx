@@ -222,17 +222,6 @@ export default function Home() {
               </li>
             ))}
           </ul>
-          <p className="mt-6 max-w-3xl text-sm leading-relaxed text-meltwater">
-            Longer lists exist, and the four above are not the whole response. UNICEF, the World
-            Food Programme, the WHO, Catholic Relief Services, Save the Children, World Vision and
-            Plan International are all reported to be running one.{" "}
-            <span className="text-paper">They are named here rather than linked above</span> because
-            we could not open and check a giving page for each of them, and a list of places to send
-            money should not imply more checking than it has had. The UN flash appeal is not up
-            there either — it is funded by member states, CERF and pooled funds rather than by card,
-            so it is the yardstick this page measures against rather than somewhere to send twenty
-            dollars. <Source id="nyt-nepal-donate-2026" />
-          </p>
         </section>
       </main>
       <SiteFooter />
