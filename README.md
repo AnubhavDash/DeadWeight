@@ -231,30 +231,6 @@ cold-weather shelter passes here and would not in a tropical flood. A second
 response means sourcing all three to the same standard and re-deriving that
 column, not re-pointing a constant. Calibrating to one response is the design.
 
-**A `vercel.json`.** Next.js on Vercel is zero-config — the framework is detected,
-the commands are inferred, and every route in `app/` is wired up without being
-declared anywhere. A `vercel.json` restating those defaults would be a second
-place for the truth to live and a first place for it to drift. The one thing it
-would plausibly have carried is response headers, and those are in
-`next.config.ts` instead, so they apply in `next dev` and `next start` too and
-what ships is what was tested. There is no Content-Security-Policy: doing one
-properly here needs a per-request nonce for React's inline bootstrap plus
-allowances for the WebGL shaders and the Solana RPC, and a CSP that is wrong is
-worse than none.
-
-**A version pin that would make `npm audit` green.** Two moderate advisories are
-open against `stream-json@1.9.1`, pulled in transitively by
-`@solana/web3.js → jayson`. They are not fixable and they are not reachable, and
-both halves of that are checkable. `jayson` declares `stream-json@^1.9.1` and
-loads it with `require('stream-json/streamers/StreamValues')`; the patched `3.6.0`
-is ESM-only with a different file layout and no such subpath, so an `overrides`
-bump does not patch that call, it breaks it. It would also be patching a file this
-app never loads: `@solana/web3.js` imports `jayson/lib/client/browser`, which
-requires only `uuid` and `generateRequest`, and `stream-json` is imported by
-`jayson/lib/utils.js` alone — the server transport path. It is absent from the
-built client bundle. So the advisory stays open and documented rather than closed
-by a pin that turns an unreachable denial-of-service into a reachable crash.
-
 ---
 
 ## The notary — Solana devnet, as a demonstration
